@@ -1,6 +1,8 @@
 # BuckshotRouletteMods
 More mods for Buckshot Roulette by Mike Klubnika, based on AG061's BRML.
 
+* DealerFace: Resets the Dealer's face in between rounds.
+
 Links:
 ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.0-prerelease.1
 
