@@ -1,7 +1,7 @@
 {
 	"name": "BugFixes",
 	"namespace": "MSLaFaver",
-	"version_number": "1.0.0",
+	"version_number": "1.0.1",
 	"description": "Fixes bugs such as slow motion reset",
 	"dependencies": [],
 	"website_url": "",
