@@ -29,13 +29,14 @@ func _ready():
 	colorRect.hide()
 	
 	text = Label.new()
-	text.text = "  GAME PAUSED\n\n  PRESS ESC AGAIN TO QUIT\n  CLICK ANYWHERE TO RESUME"
+	text.text = "  GAME PAUSED\n\n  PRESS ESC AGAIN TO RESUME\n  CLICK ANYWHERE TO QUIT TO MENU"
 	
 	colorRect.add_child(text)
 
 func _input(event):
 	if event is InputEventMouseButton:
 		if (paused):
+			get_tree().change_scene_to_file("res://scenes/menu.tscn")
 			ResetPause()
 
 func _unhandled_input(event):
@@ -53,7 +54,6 @@ func _unhandled_input(event):
 			cursor_visible = cursor.cursor_visible
 			cursor.SetCursor(true,false)
 		else:
-			get_tree().change_scene_to_file("res://scenes/menu.tscn")
 			ResetPause()
 	if (event.is_action_pressed("toggle_fullscreen")):
 		if (optionsManager.setting_windowed):
