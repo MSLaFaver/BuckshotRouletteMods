@@ -1,7 +1,7 @@
 {
 	"name": "DealerFace",
 	"namespace": "MSLaFaver",
-	"version_number": "1.0.0",
+	"version_number": "1.0.1",
 	"description": "Returns the Dealer's friendly face between rounds",
 	"dependencies": [],
 	"website_url": "",
