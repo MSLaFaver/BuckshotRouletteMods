@@ -20,7 +20,6 @@ func _init() -> void:
 func install_script_extensions() -> void:
 	extensions_dir_path = mod_dir_path+"extensions/"
 	const extensions = [
-		'DealerIntelligence',
 		'RoundManager',
 	]
 	for extension in extensions:
