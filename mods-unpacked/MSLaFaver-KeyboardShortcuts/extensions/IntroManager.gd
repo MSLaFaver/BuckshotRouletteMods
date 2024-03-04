@@ -6,8 +6,10 @@ var paused = false
 var colorRect
 var text
 var cursor_visible
-var checking
-var interactionManager
+# Use of InteractionManager is disabled because clicking on the pause
+# screen quits the game anyway
+#var interactionManager
+#var checking
 var optionsManager
 var windowed = false
 
@@ -19,7 +21,7 @@ func _ready():
 	AddKey("volume_up", KEY_F3)
 	AddKey("toggle_fullscreen", KEY_F4)
 
-	interactionManager = get_node("/root/main/standalone managers/interaction manager")
+	#interactionManager = get_node("/root/main/standalone managers/interaction manager")
 	optionsManager = OptionsManager.new()
 
 	colorRect = ColorRect.new()
@@ -43,9 +45,9 @@ func _unhandled_input(event):
 	if (event.is_action_pressed("exit")):
 		if (paused == false):
 			paused = true
-			interactionManager.enabled = false
-			checking = interactionManager.checking
-			interactionManager.checking = false			
+			#interactionManager.enabled = false
+			#checking = interactionManager.checking
+			#interactionManager.checking = false			
 			AudioServer.set_bus_mute(0,true)
 			musicmanager.speaker_music.set_stream_paused(true)
 			Engine.time_scale = 0
@@ -79,5 +81,5 @@ func ResetPause():
 	Engine.time_scale = 1
 	musicmanager.speaker_music.set_stream_paused(false)
 	AudioServer.set_bus_mute(0,false)
-	interactionManager.checking = checking
-	interactionManager.enabled = true
+	#interactionManager.checking = checking
+	#interactionManager.enabled = true
