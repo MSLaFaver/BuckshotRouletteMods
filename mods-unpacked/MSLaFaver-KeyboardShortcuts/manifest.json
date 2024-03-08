@@ -1,7 +1,7 @@
 {
 	"name": "KeyboardShortcuts",
 	"namespace": "MSLaFaver",
-	"version_number": "1.1.0",
+	"version_number": "1.2.0",
 	"description": "Implements keyboard shortcuts: ESC (pause), F2/F3 (volume down/up), F4 (fullscreen), and waiver keys",
 	"dependencies": [],
 	"website_url": "",
