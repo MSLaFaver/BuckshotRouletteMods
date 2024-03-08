@@ -1,6 +1,5 @@
 extends Node
 
-
 const AUTHORNAME_MODNAME_DIR := "MSLaFaver-BugFixes"
 const AUTHORNAME_MODNAME_LOG_NAME := "MSLaFaver-BugFixes:Main"
 
@@ -30,4 +29,12 @@ func _ready() -> void:
 	pass
 
 func _process(delta):
-	pass
+	if get_tree().get_root().get_child(2).name == "main":
+		var dispenser = get_tree().get_root().get_child(2).get_node("restroom_CLUB/Cube_112")
+		var material = dispenser.mesh.surface_get_material(0) as StandardMaterial3D
+		material.albedo_texture = Texture2D.new()
+		material.albedo_color = Color(0.192,0.220,0.192,1)
+		dispenser.mesh.surface_set_material(0,material)
+	
+
+	
