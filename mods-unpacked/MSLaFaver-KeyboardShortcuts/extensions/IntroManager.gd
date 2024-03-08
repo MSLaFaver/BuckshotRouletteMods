@@ -31,8 +31,7 @@ func _ready():
 	colorRect.hide()
 	
 	text = Label.new()
-	text.text = "  GAME PAUSED\n\n  PRESS ESC AGAIN TO RESUME\n  CLICK ANYWHERE TO QUIT TO MENU"
-	
+	UpdateVolume()	
 	colorRect.add_child(text)
 
 func _input(event):
@@ -64,8 +63,10 @@ func _unhandled_input(event):
 			optionsManager.Adjust("windowed")
 	if (event.is_action_pressed("volume_down")):
 		optionsManager.Adjust("decrease")
+		UpdateVolume()
 	if (event.is_action_pressed("volume_up")):
 		optionsManager.Adjust("increase")
+		UpdateVolume()
 
 
 func AddKey(action, keycode):
@@ -83,3 +84,6 @@ func ResetPause():
 	AudioServer.set_bus_mute(0,false)
 	#interactionManager.checking = checking
 	#interactionManager.enabled = true
+
+func UpdateVolume():
+	text.text = "  GAME PAUSED\n\n  PRESS ESC AGAIN TO RESUME\n  CLICK ANYWHERE TO QUIT TO MENU\n\n  VOLUME: " + str(snapped(optionsManager.setting_volume * 100,5)) + "%"
