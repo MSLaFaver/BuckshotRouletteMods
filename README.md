@@ -15,4 +15,4 @@ All mods by MSLaFaver/ScientificGuy are compatible with each other. Below is a c
 | --- |:---:|:---:|:---:|:---:|
 | MSLaFaver-BugFixes-1.1.1 | ✅ | ✅ | ? | ? |
 | MSLaFaver-DealerFace-1.0.1 | ✅ | ✅ | ? | ? |
-| MSLaFaver-KeyboardShortcuts-1.2.0 | ✅ | ❌ | ? | ? |
+| MSLaFaver-KeyboardShortcuts-1.2.0 | ✅ | ✅ | ? | ? |
