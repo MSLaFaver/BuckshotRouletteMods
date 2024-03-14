@@ -22,7 +22,7 @@ func install_script_extensions() -> void:
 	const extensions = [
 		'IntroManager',
 		'TimeScaleManager',
-		#'InteractionManager',
+		'InteractionManager',
 		'SignatureManager',
 	]
 	for extension in extensions:
