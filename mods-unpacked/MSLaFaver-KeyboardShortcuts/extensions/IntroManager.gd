@@ -1,10 +1,12 @@
 extends "res://scripts/IntroManager.gd"
 
 const OptionsManager = preload("res://scripts/OptionsManager.gd")
+static var font = load("res://fonts/fake receipt.otf")
 
 var paused = false
 var colorRect
 var text
+var text1
 var cursor_visible
 var interactionManager
 var checking
@@ -19,18 +21,35 @@ func _ready():
 	AddKey("volume_up", KEY_F3)
 	AddKey("toggle_fullscreen", KEY_F4)
 
-	#interactionManager = get_node("/root/main/standalone managers/interaction manager")
+	interactionManager = get_node("/root/main/standalone managers/interaction manager")
 	optionsManager = OptionsManager.new()
 
 	colorRect = ColorRect.new()
-	colorRect.set_color(Color(0,0,0,0.6))
+	colorRect.set_color(Color(0,0,0,0.5))
 	colorRect.size = DisplayServer.screen_get_size()
 	add_child(colorRect)
 	colorRect.hide()
 	
 	text = Label.new()
+	text.scale = Vector2(0.76, 1)
+	text.size = Vector2(960, 35)
+	text.pivot_offset = Vector2(480, 0)
+	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	text.set("theme_override_colors/font_shadow_color", Color.BLACK)
+	text.set("theme_override_fonts/font", font)
+	
+	text1 = text.duplicate()	
+
+	text.position = Vector2(0, 120)
+	text.set("theme_override_font_sizes/font_size", 48)
+	text.text = "GAME PAUSED"
+
+	text1.position = Vector2(0, 200)
+	text1.set("theme_override_font_sizes/font_size", 22)
+
 	UpdateVolume()	
 	colorRect.add_child(text)
+	colorRect.add_child(text1)
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -84,4 +103,4 @@ func ResetPause():
 	interactionManager.enabled = true
 
 func UpdateVolume():
-	text.text = "  GAME PAUSED\n\n  PRESS ESC AGAIN TO RESUME\n  CLICK ANYWHERE TO QUIT TO MENU\n\n  VOLUME: " + str(snapped(optionsManager.setting_volume * 100,5)) + "%"
+	text1.text = "PRESS ESC AGAIN TO RESUME\nCLICK ANYWHERE TO QUIT TO MENU\n\nVOLUME: " + str(snapped(optionsManager.setting_volume * 100,5)) + "%"
