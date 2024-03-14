@@ -20,7 +20,7 @@ func install_script_extensions() -> void:
 	extensions_dir_path = mod_dir_path+"extensions/"
 	const extensions = [
 		'ResetManager',
-		'FilterController',	# Has nothing to do with the dispenser but used to run the update code only once per load
+		'FilterController',	# Has nothing to do with the dispenser but used to inject code to other nodes
 	]
 	for extension in extensions:
 		ModLoaderMod.install_script_extension(extensions_dir_path+extension+".gd")
