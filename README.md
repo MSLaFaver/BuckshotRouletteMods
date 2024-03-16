@@ -9,9 +9,9 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Final Double or Nothing score displays before lerping.
 * KeyboardShortcuts: Adds ESC (pause), F2/F3 (volume down/up), F4 (fullscreen), and all available waiver signature keys as shortcuts.
 
-ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.0
+ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.1
 
-Mods are confirmed to work with 1.1.0, not with previous versions.
+Mods are confirmed to work with the latest version of the BRML.
 
 ## Compatibility
 All mods by MSLaFaver/ScientificGuy are compatible with each other. Below is a chart of other mods tested for compatibility.
