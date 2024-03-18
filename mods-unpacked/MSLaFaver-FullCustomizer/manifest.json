@@ -1,8 +1,8 @@
 {
-	"name": "DealerFace",
+	"name": "FullCustomizer",
 	"namespace": "MSLaFaver",
-	"version_number": "1.0.1",
-	"description": "Returns the Dealer's friendly face between rounds",
+	"version_number": "2.0.0",
+	"description": "Adds full customization options to the entire game",
 	"dependencies": [],
 	"website_url": "",
 	"extra": {

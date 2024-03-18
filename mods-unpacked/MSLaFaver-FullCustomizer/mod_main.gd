@@ -1,8 +1,8 @@
 extends Node
 
 
-const AUTHORNAME_MODNAME_DIR := "MSLaFaver-DealerFace"
-const AUTHORNAME_MODNAME_LOG_NAME := "MSLaFaver-DealerFace:Main"
+const AUTHORNAME_MODNAME_DIR := "MSLaFaver-FullCustomizer"
+const AUTHORNAME_MODNAME_LOG_NAME := "MSLaFaver-FullCustomizer:Main"
 
 var mod_dir_path := ""
 var extensions_dir_path := ""
@@ -21,6 +21,7 @@ func install_script_extensions() -> void:
 	extensions_dir_path = mod_dir_path+"extensions/"
 	const extensions = [
 		'RoundManager',
+		'ItemManager',
 	]
 	for extension in extensions:
 		ModLoaderMod.install_script_extension(extensions_dir_path+extension+".gd")
