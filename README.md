@@ -12,6 +12,8 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Auto Double-or-Nothing mode
   * DealerFace
   * Carryover rounds
+  * Who starts each round
+  * Who starts each load
   * Lives
   * Total shells
   * Live shell percentage
@@ -19,8 +21,6 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Same items for player and dealer
   * Number of items
   * Item weights
-  * Who starts each round
-  * Who starts each load
 
 ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.1
 
