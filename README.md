@@ -7,6 +7,7 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Double or Nothing score is random.
   * Final Double or Nothing score displays before lerping.
 * KeyboardShortcuts: Adds ESC (pause), F2/F3 (volume down/up), F4 (fullscreen), and all available waiver signature keys as shortcuts.
+* SplashScreen (IN DEVELOPMENT): Increases the resolution of the splash screen.
 * FullCustomizer (IN DEVELOPMENT): Adds a full suite of multi-round customization options:
   * Player name
   * Auto Double-or-Nothing mode
@@ -32,4 +33,5 @@ All mods by MSLaFaver/ScientificGuy are compatible with each other. Below is a c
 | --- |:---:|:---:|:---:|:---:|
 | MSLaFaver-BugFixes-1.2.0 | ✅ | ✅ | ? | ? |
 | MSLaFaver-KeyboardShortcuts-1.2.1 | ✅ | ✅ | ? | ? |
+| MSLaFaver-SplashScreen | ✅ | ✅ | ? | ? |
 | MSLaFaver-FullCustomizer | ❌ | ✅ | ? | ? |
