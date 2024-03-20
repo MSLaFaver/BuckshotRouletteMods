@@ -16,6 +16,7 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Who starts each round
   * Who starts each load
   * Lives
+  * Scripted shells
   * Total shells
   * Live shell percentage
   * Specific items enabled
