@@ -1,34 +1,31 @@
 extends Node
 
-const AUTHORNAME_MODNAME_DIR := "MSLaFaver-BugFixes"
-const AUTHORNAME_MODNAME_LOG_NAME := "MSLaFaver-BugFixes:Main"
-
-var mod_dir_path := ""
-var extensions_dir_path := ""
-var translations_dir_path := ""
-
-var ran_main = false
-
-# Before v6.1.0
-# func _init(modLoader = ModLoader) -> void:
-func _init() -> void:
-	mod_dir_path = ModLoaderMod.get_unpacked_dir()+(AUTHORNAME_MODNAME_DIR)+"/"
-	# Add extensions
-	install_script_extensions()
-
-func install_script_extensions() -> void:
-	extensions_dir_path = mod_dir_path+"extensions/"
-	const extensions = [
-		'ResetManager',
-		'FilterController',	# Has nothing to do with the dispenser but used to inject code to other nodes
-	]
-	for extension in extensions:
-		ModLoaderMod.install_script_extension(extensions_dir_path+extension+".gd")
-
-	
-func _ready() -> void:
-	pass
+var root = null
+var post_name = "Camera/post processing/posterization test"
+var fixed_image = false
 
 func _process(delta):
-	pass
-	
+	if root == null:
+		root = get_tree().get_root()
+	elif (not fixed_image and root.get_child(2).name == "menu"):
+		var screenSize = DisplayServer.screen_get_size()
+		var viewblockerParent = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent")
+		var viewblocker = viewblockerParent.get_node("viewblocker")
+		viewblocker.z_index = 1
+		var splash = viewblockerParent.get_node("ratchet")
+		var texture = ImageTexture.create_from_image(Image.load_from_file("res://mods-unpacked/MSLaFaver-SplashScreen/splash.jpg"))
+		splash.texture = texture
+		splash.scale = Vector2(0.280073, 0.280073)
+		splash.z_index = 1
+		splash.offset_left = 960.0 * 0.423322
+		splash.offset_top = 540.0 * 0.363683
+		var black = ColorRect.new()
+		black.color = Color(0, 0, 0, 1)
+		black.size = screenSize
+		black.z_index = -1
+		black.offset_left = -float(screenSize.x) * 0.423322
+		black.offset_top = -float(screenSize.y) * 0.363683
+		splash.add_child(black)
+		fixed_image = true
+	else:
+		fixed_image = false
