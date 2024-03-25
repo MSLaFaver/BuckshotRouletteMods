@@ -25,15 +25,15 @@ func GetRandomItemFromWeight(player)->int:
 	return 0
 
 func GrabItem():
-	if (roundManager.playerData.currentBatchIndex == 1 && roundManager.currentRound == 1):
-		if (spook_counter == 1 && !spook_fired && !roundManager.playerData.seenGod):
+	if (roundManager.playerData.currentBatchIndex == 1 and roundManager.currentRound == 1):
+		if (spook_counter == 1 and not spook_fired and not roundManager.playerData.seenGod):
 			GrabSpook()
 			roundManager.playerData.seenGod = true
 			spook_fired = true
 			return
 		spook_counter += 1
 
-	if (numberOfCigs_player >= 2 && !(availableItemsToGrabArray_player == ["cigarettes"] && numberOfItemsGrabbed == 0)):
+	if (numberOfCigs_player >= 2 and not (availableItemsToGrabArray_player == ["cigarettes"] and numberOfItemsGrabbed == 0)):
 		var hasInArray = availableItemsToGrabArray_player.find("cigarettes")
 		if (hasInArray != -1):
 			availableItemsToGrabArray_player.erase("cigarettes")
@@ -43,7 +43,7 @@ func GrabItem():
 		if (hasInArray == -1):
 			availableItemsToGrabArray_player.append("cigarettes")
 			totalWeights_player += roundManager.customizer[roundManager.mainBatchIndex].items["cigarettes"][1]
-	if (numberOfCigs_player >= 1 && (availableItemsToGrabArray_player == ["cigarettes"] || availableItemsToGrabArray_player.size() == 0)):
+	if (numberOfCigs_player >= 1 and (availableItemsToGrabArray_player == ["cigarettes"] or availableItemsToGrabArray_player.size() == 0)):
 		numberOfItemsGrabbed = roundManager.roundArray[roundManager.currentRound].numberOfItemsToGrab - 1
 	availableItemsToGrabArray_player.shuffle()	
 
@@ -84,7 +84,7 @@ func GrabItem():
 	elapsed = 0
 	moving = true
 	await get_tree().create_timer(lerpDuration - .2, false).timeout
-	if (!roundManager.playerData.indicatorShown): grid.ShowGridIndicator()
+	if (not roundManager.playerData.indicatorShown): grid.ShowGridIndicator()
 	if (numberOfOccupiedGrids != 8):
 		itemsGrabbed.append(availableItemsToGrabArray_player[randindex])
 		GridParents(true)
@@ -116,10 +116,10 @@ func GrabItems_Enemy():
 		if (numberOfItemsGrabbed_enemy_thisLoad >= roundManager.roundArray[roundManager.currentRound].numberOfItemsToGrab): break
 		if (numberOfItemsGrabbed_enemy != 8):
 
-			if (numberOfCigs_dealer >= 2 && numberOfItemsGrabbed_enemy_thisLoad > 0 &&
-				(availableItemsToGrabArray_dealer == ["cigarettes"] || availableItemsToGrabArray_dealer.size() == 0)):
+			if (numberOfCigs_dealer >= 2 and numberOfItemsGrabbed_enemy_thisLoad > 0 and
+				(availableItemsToGrabArray_dealer == ["cigarettes"] or availableItemsToGrabArray_dealer.size() == 0)):
 				break
-			elif (numberOfCigs_dealer >= 2 && !(availableItemsToGrabArray_dealer == ["cigarettes"] && numberOfItemsGrabbed_enemy_thisLoad == 0)):
+			elif (numberOfCigs_dealer >= 2 and not (availableItemsToGrabArray_dealer == ["cigarettes"] and numberOfItemsGrabbed_enemy_thisLoad == 0)):
 				var hasInArray = availableItemsToGrabArray_dealer.find("cigarettes")
 				if (hasInArray != -1):
 					availableItemsToGrabArray_dealer.erase("cigarettes")
@@ -131,7 +131,7 @@ func GrabItems_Enemy():
 					totalWeights_dealer += roundManager.customizer[roundManager.mainBatchIndex].items["cigarettes"][1]
 			var randindex = -1
 			if (roundManager.customizer[roundManager.mainBatchIndex].items_even):
-				while (randindex == -1 && !itemsGrabbed.is_empty()):
+				while (randindex == -1 and not itemsGrabbed.is_empty()):
 					randindex = availableItemsToGrabArray_dealer.find(itemsGrabbed[0])
 					itemsGrabbed.remove_at(0)
 			if (randindex == -1):
@@ -144,6 +144,7 @@ func GrabItems_Enemy():
 					#ADD STRING TO DEALER ITEM ARRAY
 					itemArray_dealer.append(instanceArray_dealer[c].itemName)
 			var itemInstance = selectedResource.instance.instantiate()
+			itemInstance.visible = roundManager.customizer[roundManager.mainBatchIndex].items_visible
 			var temp_itemIndicator = itemInstance.get_child(0)
 			temp_itemIndicator.isDealerItem = true
 			#ADD INSTANCE TO DEALER ITEM ARRAY (mida vittu this code is getting out of hand)

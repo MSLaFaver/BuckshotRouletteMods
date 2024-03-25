@@ -1,14 +1,6 @@
 extends "res://scripts/RoundManager.gd"
 
-var enable_customization = false
-var playername = ""
-var don = false
-var swap_dealer_mesh = false
-var multi_round_config = false
-var carryover = 4	# BINARY
 var carryover_array
-var round_order = 0
-
 var isPlayernameValid = false
 var introManager
 var totalWeights
@@ -17,16 +9,29 @@ var playerTurn = true
 var firstRound = true
 var myTurnMessage = "MY TURN."
 
+var customizer_main = {
+	"enable": true,
+	"name": "",
+	"don": false,
+	"swap_dealer_mesh": true,
+	"multi_round_config": false,
+	"carryover": 4	# BINARY
+}
 var customizer
 var customizer_round1 = {
+	"start_round": 0,	# Player / Dealer / Random
+	"start_load": 0,	# Starter / Alternate / Persist
 	"lives_min": 2,
 	"lives_max": 4,
+	"shells_scripted": false,
 	"shells_total_min": 2,
 	"shells_total_max": 8,
 	"shells_live_percentage_min": 0.5,
 	"shells_live_percentage_max": 0.5,
+	"shells_difficulty": 0,		# Visible / Total / Hidden
 	"items_on": true,
 	"items_even": false,
+	"items_visible": true,
 	"items_total_min": 1,
 	"items_total_max": 4,
 	"items_handsaw_enabled": true,
@@ -39,17 +44,15 @@ var customizer_round1 = {
 	"items_cigarettes_weight": 10,
 	"items_handcuffs_enabled": true,
 	"items_handcuffs_weight": 10,
-	"start_round": 0,	# Player / Dealer / Random
-	"start_load": 0		# Starter / Alternate / Persist
 }
 var customizer_round2 = {}
 var customizer_round3 = {}
 
 func _process(delta):
 	LerpScore()
-	if (don):
+	if (customizer_main.don):
 		if (introManager.allowingPills):
-			don = false
+			customizer_main.don = false
 			introManager.parent_pills.visible = false
 			introManager.endlessmode.SetupEndless()
 
@@ -59,54 +62,43 @@ func _ready():
 	for key in customizer_round1:
 		customizer_round2[key] = customizer_round1[key]
 		customizer_round3[key] = customizer_round1[key]
-
-	var config_filename = OS.get_executable_path().get_base_dir()+"/config/MSLaFaver-FullCustomizer.cfg"
-	var config = ConfigFile.new()
-	var err = config.load(config_filename)
 	
-	if (err != OK):
-		if FileAccess.file_exists(config_filename):
-			print("ERROR: Ignored corrupted /config/MSLaFaver-FullCustomizer.cfg.")
-		else:
-			config.set_value("main", "enable", true)
-			config.set_value("main", "name", playername)
-			config.set_value("main", "don", don)
-			config.set_value("main", "swap_dealer_mesh", swap_dealer_mesh)
-			config.set_value("main", "multi_round_config", multi_round_config)
-			config.set_value("main", "carryover", carryover)
-			for key in customizer_round1: config.set_value("round1", key, customizer_round1[key])
-			for key in customizer_round2: config.set_value("round2", key, customizer_round2[key])
-			for key in customizer_round3: config.set_value("round3", key, customizer_round3[key])
-			err = config.save(config_filename)
-			if (err != OK): print("ERROR: Could not save /config/MSLaFaver-FullCustomizer.cfg.")
-	elif config.get_value("main", "enable"):
-		enable_customization = true
+	var needToUpdate = true
+	ModLoaderStore.mod_data["MSLaFaver-FullCustomizer"].load_configs()
+	var config_object = ModLoaderConfig.get_config("MSLaFaver-FullCustomizer", "user")
+	if (config_object == null):
+		needToUpdate = false
+		config_object = ModLoaderConfig.create_config("MSLaFaver-FullCustomizer", "user",
+			{"main": customizer_main, "customizer": {"round1": customizer_round1, "round2": customizer_round2, "round3": customizer_round3}})
+	ModLoaderConfig.set_current_config(config_object)
+	var config = config_object.data
+	if (needToUpdate and config.main.enable):
+		customizer_main.enable = true
 		var regex = RegEx.new()
 		regex.compile("^[a-zA-Z]+$")
-		playername = config.get_value("main", "name")
-		isPlayernameValid = (playername.length() <= 6) && regex.search(playername)
+		customizer_main.name = config.main.name
+		isPlayernameValid = (customizer_main.name.length() <= 6) and regex.search(customizer_main.name)
 		if (isPlayernameValid):
-			playerData.playername = playername.to_upper()
+			playerData.playername = customizer_main.name.to_upper()
 			playerData.hasSignedWaiver = true
-		don = config.get_value("main", "don")
-		if (don):
+		customizer_main.don = config.main.don
+		if (customizer_main.don):
+			playerData.seenHint = true
 			introManager = get_tree().get_root().get_child(2).get_node("standalone managers/intro manager")
-		swap_dealer_mesh = config.get_value("main", "swap_dealer_mesh")
-		multi_round_config = config.get_value("main", "multi_round_config")
-		carryover = config.get_value("main", "carryover")
-		if (carryover > 7 || carryover < 0):
-			carryover = 4
-		var keys = config.get_section_keys("round1")
-		for key in keys:
-			customizer_round1[key] = config.get_value("round1", key)
-		keys = config.get_section_keys("round2")
-		for key in keys:
-			customizer_round2[key] = config.get_value("round2", key)
-		keys = config.get_section_keys("round3")
-		for key in keys:
-			customizer_round3[key] = config.get_value("round3", key)
+		customizer_main.swap_dealer_mesh = config.main.swap_dealer_mesh
+		customizer_main.multi_round_config = config.main.multi_round_config
+		customizer_main.carryover = config.main.carryover
+		if (customizer_main.carryover > 7 or customizer_main.carryover < 0):
+			customizer_main.carryover = 4
+		for key in config.customizer.round1:
+			customizer_round1[key] = config.customizer.round1[key]
+		for key in config.customizer.round2:
+			customizer_round2[key] = config.customizer.round2[key]
+		for key in config.customizer.round3:
+			customizer_round3[key] = config.customizer.round3[key]
+	
 
-	if (multi_round_config):
+	if (customizer_main.multi_round_config):
 		customizer = [customizer_round1, customizer_round2, customizer_round3]
 	else:
 		customizer = [customizer_round1, customizer_round1, customizer_round1]
@@ -119,24 +111,24 @@ func _ready():
 			"cigarettes": [customizer_round.items_cigarettes_enabled, customizer_round.items_cigarettes_weight],
 			"handcuffs": [customizer_round.items_handcuffs_enabled, customizer_round.items_handcuffs_weight]
 		}
-		if (!multi_round_config): break
+		if (not customizer_main.multi_round_config): break
 
-	carryover_array = [bool(carryover % 2), bool((carryover / 2) % 2), bool((carryover / 4) % 2)]
+	carryover_array = [bool(customizer_main.carryover % 2), bool((customizer_main.carryover / 2) % 2), bool((customizer_main.carryover / 4) % 2)]
 
 func ShortRandom(min_val, min_min, max_val, max_max, isFloat = false):
-	if min_val == max_val:
-		return min_val
+	if (min_val == max_val) or (min_val >= max_val):
+		return max(min(max_val, max_max), min_min)
 	else:
 		if isFloat: return randf_range(max(min_val, min_min), min(max_val, max_max))
 		else: return randi_range(max(min_val, min_min), min(max_val, max_max))
 
 func MainBatchSetup(dealerEnterAtStart : bool):
-	if (!enteringFromWaiver):
+	if (not enteringFromWaiver):
 		if (lerping): camera.BeginLerp("enemy")
 		currentRound = 0
-		if (!dealerAtTable && dealerEnterAtStart):
+		if (not dealerAtTable and dealerEnterAtStart):
 			await get_tree().create_timer(.5, false).timeout
-			if (!dealerCuffed): animator_dealerHands.play("dealer hands on table")
+			if (not dealerCuffed): animator_dealerHands.play("dealer hands on table")
 			else: animator_dealerHands.play("dealer hands on table cuffed")
 			animator_dealer.play("dealer return to table")
 			await get_tree().create_timer(2, false).timeout
@@ -146,20 +138,20 @@ func MainBatchSetup(dealerEnterAtStart : bool):
 				await get_tree().create_timer(2.3, false).timeout
 				shellLoader.dialogue.HideText()
 				dealerHasGreeted = true
-			if (!playerData.hasSignedWaiver):
+			if (not playerData.hasSignedWaiver):
 				shellLoader.dialogue.ShowText_Forever("PLEASE SIGN THE WAIVER.")
 				await get_tree().create_timer(2.3, false).timeout
 				shellLoader.dialogue.HideText()
 				camera.BeginLerp("home")
 				sign.AwaitPickup()
 				return
-			if (!dealerHasGreeted && greeting):
+			if (not dealerHasGreeted and greeting):
 				var tempstring
-				if (!playerData.enteringFromTrueDeath): tempstring = "WELCOME BACK."
+				if (not playerData.enteringFromTrueDeath): tempstring = "WELCOME BACK."
 				else: 
 					shellSpawner.dialogue.dealerLowPitched = true
 					tempstring = "..."
-				if (!playerData.playerEnteringFromDeath):
+				if (not playerData.playerEnteringFromDeath):
 					shellLoader.dialogue.ShowText_Forever("WELCOME TO\nBUCKSHOT ROULETTE.")
 					await get_tree().create_timer(2.3, false).timeout
 					shellLoader.dialogue.HideText()
@@ -182,7 +174,7 @@ func MainBatchSetup(dealerEnterAtStart : bool):
 	lerping = true
 	#await get_tree().create_timer(1.5, false).timeout
 	StartRound(false)
-	if (dealerAI.swapped && swap_dealer_mesh):
+	if (dealerAI.swapped and customizer_main.swap_dealer_mesh):
 		dealerAI.dealermesh_crushed.set_layer_mask_value(1, false)
 		dealerAI.dealermesh_normal.set_layer_mask_value(1, true)
 		dealerAI.swapped = false
@@ -211,21 +203,26 @@ func GenerateRandomBatches():
 		var minLives = 1
 		var usingItems = customizer[b.batchIndex].items_on
 		var numberOfItems = ShortRandom(customizer[b.batchIndex].items_total_min, 1, customizer[b.batchIndex].items_total_max, 8)
-		if (!endless):
+		if (not endless):
 			match b.batchIndex:
 				0: usingItems = false
 				1: usingItems = true
 				2: minLives = 3
+		b.roundArray[0].startingHealth = ShortRandom(customizer[b.batchIndex].lives_min, minLives, customizer[b.batchIndex].lives_max, 6)
 		for i in range(b.roundArray.size()):
-			b.roundArray[i].startingHealth = ShortRandom(customizer[b.batchIndex].lives_min, minLives, customizer[b.batchIndex].lives_max, 6)
-			
-			var total_shells = ShortRandom(customizer[b.batchIndex].shells_total_min, 1, customizer[b.batchIndex].shells_total_max, 8)
-			var amount_live = max(1, total_shells * ShortRandom(customizer[b.batchIndex].shells_live_percentage_min, 0.0, customizer[b.batchIndex].shells_live_percentage_min, 1.0, true))
-			var amount_blank = total_shells - amount_live
-			b.roundArray[i].amountBlank = amount_blank
-			b.roundArray[i].amountLive = amount_live
+			if (not customizer[b.batchIndex].shells_scripted):
+				var total_shells = ShortRandom(customizer[b.batchIndex].shells_total_min, 1, customizer[b.batchIndex].shells_total_max, 8)
+				var amount_live
+				if (customizer[b.batchIndex].shells_live_percentage_min == customizer[b.batchIndex].shells_live_percentage_max
+					and customizer[b.batchIndex].shells_live_percentage_min == 0.5):
+					amount_live = max(1, int(total_shells * 0.5))
+				else:
+					amount_live = max(1, ceili(float(total_shells) * ShortRandom(customizer[b.batchIndex].shells_live_percentage_min, 0.0, customizer[b.batchIndex].shells_live_percentage_max, 1.0, true)))
+				var amount_blank = total_shells - amount_live
+				b.roundArray[i].amountBlank = amount_blank
+				b.roundArray[i].amountLive = amount_live
 
-			if (!endless && b.batchIndex > 0):
+			if (not endless and b.batchIndex > 0):
 				b.roundArray[i].numberOfItemsToGrab = numberOfItems
 			else:
 				b.roundArray[i].numberOfItemsToGrab = ShortRandom(customizer[b.batchIndex].items_total_min, 1, customizer[b.batchIndex].items_total_max, 8)
@@ -234,7 +231,7 @@ func GenerateRandomBatches():
 			if flip == 1: b.roundArray[i].shufflingArray = true
 
 func SetupRoundArray():
-	if (endless || enable_customization): GenerateRandomBatches()
+	if (endless or customizer_main.enable): GenerateRandomBatches()
 	roundArray = []
 	for i in range(batchArray.size()):
 		if (batchArray[i].batchIndex == mainBatchIndex):
@@ -264,18 +261,18 @@ func StartRound(gettingNext):
 		itemManager.availableItemsToGrabArray_dealer = itemManager.availableItemArray
 		itemManager.totalWeights_player = totalWeights
 		itemManager.totalWeights_dealer = totalWeights
-	if (gettingNext && (currentRound +  1) != roundArray.size()): currentRound += 1
+	if (gettingNext and (currentRound +  1) != roundArray.size()): currentRound += 1
 	#USINGITEMS: SETUP ITEM GRIDS IF ROUND CLASS HAS SETUP ITEM GRIDS ENABLED
 	#UNCUFF BOTH PARTIES BEFORE ITEM DISTRIBUTION
 	await (handcuffs.RemoveAllCuffsRoutine())
 	#FINAL SHOWDOWN DIALOGUE
-	if (playerData.currentBatchIndex == 2 && !defibCutterReady && !endless):
+	if (playerData.currentBatchIndex == 2 and not defibCutterReady and not endless):
 		shellLoader.dialogue.dealerLowPitched = true
 		camera.BeginLerp("enemy") 
 		await get_tree().create_timer(.6, false).timeout
 		#var origdelay = shellLoader.dialogue.incrementDelay
 		#shellLoader.dialogue.incrementDelay = .1
-		if (!playerData.cutterDialogueRead):
+		if (not playerData.cutterDialogueRead):
 			shellLoader.dialogue.ShowText_Forever("AT LONG LAST, WE ARRIVE\nAT THE FINAL SHOWDOWN.")
 			await get_tree().create_timer(4, false).timeout
 			shellLoader.dialogue.ShowText_Forever("NO MORE DEFIBRILLATORS.\nNO MORE BLOOD TRANSFUSIONS.")
@@ -296,7 +293,7 @@ func StartRound(gettingNext):
 	var prevBatchIndex = mainBatchIndex - 1
 	if (prevBatchIndex < 0): prevBatchIndex = 2
 	if (roundArray[currentRound].usingItems):
-		if (currentRound > 0 || (currentRound == 0 && carryover_array[prevBatchIndex] && customizer[prevBatchIndex].items_on)):
+		if (currentRound > 0 or (currentRound == 0 and carryover_array[prevBatchIndex] and customizer[prevBatchIndex].items_on)):
 			itemManager.newBatchHasBegun = false
 			itemManager.BeginItemGrabbing()
 			return
@@ -305,42 +302,43 @@ func StartRound(gettingNext):
 			itemManager.BeginItemGrabbing()
 			return
 	else:
-		if (!firstRound && !carryover_array[prevBatchIndex] && currentRound == 0):
+		if (not firstRound and not carryover_array[prevBatchIndex] and currentRound == 0):
 			await itemManager.HideItems()
-	if (currentRound <= 2 && roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive == 1):
+	if (currentRound <= 2 and roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive == 1 and not (customizer[mainBatchIndex].shells_difficulty == 2)):
 		shellLoader.loadingDialogues[currentRound] = singleShellDialogues[currentRound]
-	shellSpawner.MainShellRoutine()
+	MainShellRoutine()
 	pass
 
 func LoadShells():
 	var playerStartsLoad = true
-	if (currentRound != 0 || !playerStartsRound[mainBatchIndex]):
+	if (currentRound != 0 or not playerStartsRound[mainBatchIndex]):
 		match customizer[mainBatchIndex].start_load:
 			1:
 				playerStartsLoad = bool((currentRound + 1) % 2)
-				if (!playerStartsRound[mainBatchIndex]): playerStartsLoad = !playerStartsLoad
-			2: playerStartsLoad = !playerTurn
+				if (not playerStartsRound[mainBatchIndex]): playerStartsLoad = not playerStartsLoad
+			2: playerStartsLoad = not playerTurn
 			_: playerStartsLoad = playerStartsRound[mainBatchIndex]
 	camera.BeginLerp("enemy")
-	if (!shellLoadingSpedUp): await get_tree().create_timer(.8, false).timeout
+	if (not shellLoadingSpedUp): await get_tree().create_timer(.8, false).timeout
 	await(shellLoader.DealerHandsGrabShotgun())
 	await get_tree().create_timer(.2, false).timeout
 	shellLoader.animator_shotgun.play("grab shotgun_pointing enemy")
 	await get_tree().create_timer(.45, false).timeout
-	if (!endless && !playerData.playerEnteringFromDeath && mainBatchIndex == 0 && playerData.numberOfDialogueRead < 12):	
+	if (not endless and not playerData.playerEnteringFromDeath and mainBatchIndex == 0 and playerData.numberOfDialogueRead < 12):	
 		if (shellLoader.diaindex == shellLoader.loadingDialogues.size()):
 			shellLoader.diaindex = 0
 		shellLoader.dialogue.ShowText_ForDuration(shellLoader.loadingDialogues[shellLoader.diaindex], 3)
 		shellLoader.diaindex += 1
 		await get_tree().create_timer(3, false).timeout
 		playerData.numberOfDialogueRead += 1
-	var numberOfShells = roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive
-	for i in range(numberOfShells):
-		shellLoader.speaker_loadShell.play()
-		shellLoader.animator_dealerHandRight.play("load single shell")
-		if(shellLoadingSpedUp): await get_tree().create_timer(.17, false).timeout
-		else: await get_tree().create_timer(.32, false).timeout
-		pass
+	if not (customizer[mainBatchIndex].shells_difficulty == 2):
+		var numberOfShells = roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive
+		for i in range(numberOfShells):
+			shellLoader.speaker_loadShell.play()
+			shellLoader.animator_dealerHandRight.play("load single shell")
+			if(shellLoadingSpedUp): await get_tree().create_timer(.17, false).timeout
+			else: await get_tree().create_timer(.32, false).timeout
+			pass
 	shellLoader.animator_dealerHandRight.play("RESET")
 	dealerAI.Speaker_HandCrack()
 	if (shellLoadingSpedUp): await get_tree().create_timer(.17, false).timeout
@@ -356,12 +354,13 @@ func LoadShells():
 		cursor.SetCursor(true, true)
 		perm.SetIndicators(true)
 		perm.SetInteractionPermissions(true)
+		playerTurn = true
 	else:
 		await get_tree().create_timer(.6, false).timeout
 		shellLoader.dialogue.ShowText_Forever(myTurnMessage)
 		if (myTurnMessage == "MY TURN."):
 			myTurnMessage = "MY TURN AGAIN."
-		await get_tree().create_timer(1.4, false).timeout
+		await get_tree().create_timer(1.6, false).timeout
 		shellLoader.dialogue.HideText()
 		await get_tree().create_timer(.2, false).timeout
 		EndTurn(false)
@@ -377,7 +376,7 @@ func EndTurn(playerCanGoAgain : bool):
 		if (playerCanGoAgain):
 			BeginPlayerTurn()
 		else:
-			if (!dealerCuffed):
+			if (not dealerCuffed):
 				playerTurn = false
 				dealerAI.BeginDealerTurn()
 			else:
@@ -391,12 +390,137 @@ func EndTurn(playerCanGoAgain : bool):
 	else:
 		if (requestedWireCut):
 			await(defibCutter.CutWire(wireToCut)) 
-		if (!ignoring): 
+		if (not ignoring): 
 			StartRound(true)
 
 func BeginPlayerTurn():
-	super.BeginPlayerTurn()
+	if (playerCuffed):
+		var returning = false
+		if (playerAboutToBreakFree == false):
+			handcuffs.CheckPlayerHandCuffs(false)
+			await get_tree().create_timer(1.4, false).timeout
+			camera.BeginLerp("enemy")
+			dealerAI.BeginDealerTurn()
+			returning = true
+			playerAboutToBreakFree = true
+		else:
+			handcuffs.BreakPlayerHandCuffs(false)
+			await get_tree().create_timer(1.4, false).timeout
+			camera.BeginLerp("home")
+			playerCuffed = false
+			playerAboutToBreakFree = false
+			returning = false
+		if (returning): return
+	if (requestedWireCut):
+		await(defibCutter.CutWire(wireToCut))
+	await get_tree().create_timer(.6, false).timeout
+	perm.SetStackInvalidIndicators()
+	cursor.SetCursor(true, true)
+	perm.SetIndicators(true)
+	perm.SetInteractionPermissions(true)
 	playerTurn = true
+
+func MainShellRoutine():
+	if (playerData.currentBatchIndex != 0):
+		shellLoadingSpedUp = true
+	shellSpawner.sequenceArray = []
+	if (roundArray[currentRound].bootingUpCounter):
+		camera.BeginLerp("health counter")
+		await get_tree().create_timer(.5, false).timeout
+		healthCounter.Bootup()
+		await get_tree().create_timer(1.4, false).timeout
+	camera.BeginLerp("shell compartment")
+	await get_tree().create_timer(.5, false).timeout
+	var temp_nr = roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive
+	var temp_live = roundArray[currentRound].amountLive
+	var temp_blank = roundArray[currentRound].amountBlank
+	var temp_shuf = roundArray[currentRound].shufflingArray
+
+	for i in range(shellSpawner.spawnedShellObjectArray.size()):
+		shellSpawner.spawnedShellObjectArray[i].queue_free()
+	shellSpawner.spawnedShellObjectArray = []
+	
+	shellSpawner.sequenceArray = []
+	shellSpawner.tempSequence = []
+	for i in range(temp_live):
+		shellSpawner.tempSequence.append("live")
+	for i in range(temp_blank):
+		shellSpawner.tempSequence.append("blank")
+	if (temp_shuf):
+		shellSpawner.tempSequence.shuffle()
+	for i in range(shellSpawner.tempSequence.size()):
+		shellSpawner.sequenceArray.append(shellSpawner.tempSequence[i])
+		pass
+	
+	if not (customizer[mainBatchIndex].shells_difficulty == 2):
+		shellSpawner.locationIndex = 0
+		for i in range(temp_nr):
+			shellSpawner.spawnedShell = shellSpawner.shellInstance.instantiate()
+			shellSpawner.shellBranch = shellSpawner.spawnedShell.get_child(0)
+			if (not (customizer[mainBatchIndex].shells_difficulty == 1) and shellSpawner.sequenceArray[i] == "live"):
+				shellSpawner.shellBranch.isLive = true
+			else: shellSpawner.shellBranch.isLive = false
+			shellSpawner.shellBranch.ApplyStatus()
+			shellSpawner.spawnParent.add_child(shellSpawner.spawnedShell)
+			shellSpawner.spawnedShell.transform.origin = shellSpawner.shellLocationArray[shellSpawner.locationIndex]
+			shellSpawner.spawnedShell.rotation_degrees = Vector3(-90, -90, 180)
+			shellSpawner.spawnedShellObjectArray.append(shellSpawner.spawnedShell)
+			shellSpawner.locationIndex += 1
+
+	if not (customizer[mainBatchIndex].shells_difficulty == 2):
+		shellSpawner.seq = shellSpawner.sequenceArray.duplicate()
+		if (customizer[mainBatchIndex].shells_difficulty == 1):
+			for i in range(shellSpawner.seq.size()):
+				if (randi_range(0,1) == 1): shellSpawner.seq[i] = "live"
+				else: shellSpawner.seq[i] = "blank"
+		shellSpawner.anim_compartment.play("show shells")
+		shellSpawner.PlayLatchSound()
+		shellSpawner.PlayAudioIndicators()
+		await get_tree().create_timer(1, false).timeout
+	ignoring = false
+	var finalstring : String
+	match customizer[mainBatchIndex].shells_difficulty:
+		1:
+			var text_total
+			if (temp_nr == 1): text_total = "ROUND."
+			else: text_total = "ROUNDS."
+			finalstring = str(temp_nr) + " " + text_total + " LIVE OR BLANK."
+		2:
+			finalstring = "NOTHING HERE FOR OUR EYES ..."
+		_:
+			var text_lives
+			var text_blanks
+			if (temp_live == 1): text_lives = "LIVE ROUND."
+			else: text_lives = "LIVE ROUNDS."
+			if (temp_blank == 1): text_blanks = "BLANK."
+			else: text_blanks = "BLANKS."
+			finalstring = str(temp_live) + " " + text_lives + " " + str(temp_blank) + " " + text_blanks
+	var maindur = 1.3
+	if (playerData.currentBatchIndex == 2):
+		playerData.skippingShellDescription = true
+	if (not playerData.skippingShellDescription or customizer[mainBatchIndex].shells_difficulty == 2):
+		shellSpawner.dialogue.ShowText_Forever(finalstring)
+	if (playerData.skippingShellDescription and not shellSpawner.skipDialoguePresented):
+		shellSpawner.dialogue.ShowText_Forever("YOU KNOW THE DRILL.")
+		maindur = 2.5
+		shellSpawner.skipDialoguePresented = true
+	if (not playerData.skippingShellDescription or customizer[mainBatchIndex].shells_difficulty == 2):
+		await get_tree().create_timer(2.5, false).timeout
+	else: await get_tree().create_timer(maindur, false).timeout
+	shellSpawner.dialogue.HideText()
+	if not(customizer[mainBatchIndex].shells_difficulty == 2):
+		shellSpawner.anim_compartment.play("hide shells")
+		shellSpawner.PlayLatchSound()
+	if(shellLoadingSpedUp): await get_tree().create_timer(.2, false).timeout
+	else: await get_tree().create_timer(.5, false).timeout
+	if (roundArray[currentRound].insertingInRandomOrder):
+		shellSpawner.sequenceArray.shuffle()
+		shellSpawner.sequenceArray.shuffle()
+	LoadShells()
+	return
+
+func ReturnFromItemGrabbing():
+	MainShellRoutine()
 
 func EndMainBatch():
 	firstRound = false
@@ -404,6 +528,6 @@ func EndMainBatch():
 
 var singleShellDialogues = [
 	"I INSERT THE LONE SHELL\nINTO THE CHAMBER.",
-	"IT ENTERS THE CHAMBER\nTO DO YOUR BIDDING.",
+	"IT ENTERS THE CHAMBER\nTO DO OUR BIDDING.",
 	"A SINGLE SHELL\nSPELLS A CLEAR FATE."
 ]
