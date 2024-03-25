@@ -1,7 +1,7 @@
 {
 	"name": "FullCustomizer",
 	"namespace": "MSLaFaver",
-	"version_number": "2.0.0",
+	"version_number": "1.0.0",
 	"description": "Adds full customization options to the entire game",
 	"dependencies": [],
 	"website_url": "",
@@ -15,7 +15,15 @@
 			"incompatibilities": [],
 			"compatible_mod_loader_version": ["6.2.0"],
 			"compatible_game_version": ["1.1.0"],
-			"config_schema": {}
+			"config_schema": {
+				"type": "object",
+				"properties": {
+					"unused": {
+						"type": "boolean",
+						"default": false
+					}
+				}
+			}
 		}
 	}
 }
