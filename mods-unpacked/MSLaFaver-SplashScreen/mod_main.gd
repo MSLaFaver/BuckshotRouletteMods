@@ -7,7 +7,7 @@ var fixed_image = false
 func _process(delta):
 	if root == null:
 		root = get_tree().get_root()
-	elif (!fixed_image && root.get_child(2).name == "menu"):
+	elif (not fixed_image and root.get_child(2).name == "menu"):
 		var screenSize = DisplayServer.screen_get_size()
 		var viewblockerParent = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent")
 		var viewblocker = viewblockerParent.get_node("viewblocker")
