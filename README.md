@@ -18,11 +18,13 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
   * Lives
   * Scripted shells
   * Total shells
+  * Shell difficulty
   * Live shell percentage
   * Specific items enabled
   * Same items for player and dealer
   * Number of items
   * Item weights
+  * Item visibility
 
 ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.1
 
