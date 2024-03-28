@@ -1,8 +1,8 @@
 {
-	"name": "SplashScreen",
+	"name": "BugFixes",
 	"namespace": "MSLaFaver",
-	"version_number": "1.0.0",
-	"description": "Increases the resolution of the splash screen",
+	"version_number": "1.2.1",
+	"description": "Fixes bugs. For full list, see README.md",
 	"dependencies": [],
 	"website_url": "",
 	"extra": {
