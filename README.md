@@ -23,7 +23,7 @@ All MSLaFaver mods are compatible with each other. Below is a chart of other mod
 | [MSLaFaver-FullCustomizer-1.0.0](https://github.com/MSLaFaver/BuckshotRouletteMods/releases/latest) | ℹ️ | ✅ | ❓ | ❓ |
 | [MSLaFaver-KeyboardShortcuts-1.2.2](https://github.com/MSLaFaver/BuckshotRouletteMods/releases/latest) | ✅ | ✅ | ❓ | ❓ |
 | [MSLaFaver-SplashScreen-1.0.0](https://github.com/MSLaFaver/BuckshotRouletteMods/releases/latest) | ✅ | ✅ | ❓ | ❓ |
-| [MSLaFaver-VirtualReality-0.0.1](https://github.com/MSLaFaver/BuckshotRouletteMods/releases/latest) | ✅ | ✅ | ❓ | ❓ |
+| [MSLaFaver-VirtualReality-0.0.1](https://github.com/MSLaFaver/BuckshotRouletteMods/releases/latest) | ✅ | N/A | ❓ | ❓ |
 
 ## VirtualReality Setup
 The VirtualReality mod uses an OpenXR runtime such as SteamVR to run Buckshot Roulette in full VR. To use the mod, download `override.cfg` and place it in the same folder as the patched .exe file. The game should then be able to work with an OpenXR compatible HMD (head-mounted display). The main menu can be skipped with spacebar, and the base game uses the mouse for interaction. Look at in-game objects and click with your computer mouse to select them. Controller support will be added in a future version.
