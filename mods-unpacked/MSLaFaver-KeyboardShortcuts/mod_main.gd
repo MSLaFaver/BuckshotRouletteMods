@@ -47,9 +47,11 @@ func _ready():
 
 func _process(delta):
 	root_child = get_tree().get_root().get_child(2)			
-	if (root_child.name == "main"):
+	if (root_child.name == "main" and not root_child.has_node("standalone managers/options manager")):
 		introManager = root_child.get_node("standalone managers/intro manager")
 		optionsManager = OptionsManager.new()
+		optionsManager.name = "options manager"
+		root_child.get_node("standalone managers").add_child(optionsManager)
 		if not introManager.has_node("pause menu"):
 			interactionManager = root_child.get_node("standalone managers/interaction manager")
 
@@ -80,6 +82,12 @@ func _process(delta):
 			UpdateVolume()	
 			colorRect.add_child(text)
 			colorRect.add_child(text1)
+	elif (root_child.name == "heaven" and not root_child.has_node("standalone managers/options manager")):
+		optionsManager = OptionsManager.new()
+		optionsManager.name = "options manager"
+		root_child.get_node("standalone managers").add_child(optionsManager)
+	elif (root_child.name == "menu"):
+		optionsManager = root_child.get_node("standalone managers/options manager")
 
 func _input(event):
 	if event is InputEventMouseButton:
