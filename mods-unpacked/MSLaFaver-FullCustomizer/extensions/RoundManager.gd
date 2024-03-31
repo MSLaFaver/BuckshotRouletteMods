@@ -10,7 +10,7 @@ var firstRound = true
 var myTurnMessage = "MY TURN."
 
 var customizer_main = {
-	"enable": true,
+	"enable": false,
 	"name": "",
 	"don": false,
 	"swap_dealer_mesh": true,
@@ -70,7 +70,6 @@ func _ready():
 		needToUpdate = false
 		config_object = ModLoaderConfig.create_config("MSLaFaver-FullCustomizer", "user",
 			{"main": customizer_main, "customizer": {"round1": customizer_round1, "round2": customizer_round2, "round3": customizer_round3}})
-	ModLoaderConfig.set_current_config(config_object)
 	var config = config_object.data
 	if (needToUpdate and config.main.enable):
 		customizer_main.enable = true
@@ -96,7 +95,8 @@ func _ready():
 			customizer_round2[key] = config.customizer.round2[key]
 		for key in config.customizer.round3:
 			customizer_round3[key] = config.customizer.round3[key]
-	
+	else:
+		customizer_main.enable = false	
 
 	if (customizer_main.multi_round_config):
 		customizer = [customizer_round1, customizer_round2, customizer_round3]
@@ -162,6 +162,10 @@ func MainBatchSetup(dealerEnterAtStart : bool):
 					shellLoader.dialogue.HideText()
 					dealerHasGreeted = true
 			dealerAtTable = true
+	if (dealerAI.swapped and customizer_main.swap_dealer_mesh):
+		dealerAI.dealermesh_crushed.set_layer_mask_value(1, false)
+		dealerAI.dealermesh_normal.set_layer_mask_value(1, true)
+		dealerAI.swapped = false
 	enteringFromWaiver = false
 	playerData.enteringFromTrueDeath = false
 	mainBatchIndex = playerData.currentBatchIndex
@@ -174,10 +178,6 @@ func MainBatchSetup(dealerEnterAtStart : bool):
 	lerping = true
 	#await get_tree().create_timer(1.5, false).timeout
 	StartRound(false)
-	if (dealerAI.swapped and customizer_main.swap_dealer_mesh):
-		dealerAI.dealermesh_crushed.set_layer_mask_value(1, false)
-		dealerAI.dealermesh_normal.set_layer_mask_value(1, true)
-		dealerAI.swapped = false
 	myTurnMessage = "MY TURN."
 	var newDialogues = [
 		"SOMETHING FEELS OFF.\nWHAT ARE YOU DOING?",
@@ -205,9 +205,14 @@ func GenerateRandomBatches():
 		var numberOfItems = ShortRandom(customizer[b.batchIndex].items_total_min, 1, customizer[b.batchIndex].items_total_max, 8)
 		if (not endless):
 			match b.batchIndex:
-				0: usingItems = false
-				1: usingItems = true
-				2: minLives = 3
+				0:
+					usingItems = false
+					customizer[b.batchIndex].items_on = false
+				1:
+					usingItems = true
+					customizer[b.batchIndex].items_on = true
+				2:
+					minLives = 3
 		b.roundArray[0].startingHealth = ShortRandom(customizer[b.batchIndex].lives_min, minLives, customizer[b.batchIndex].lives_max, 6)
 		for i in range(b.roundArray.size()):
 			if (not customizer[b.batchIndex].shells_scripted):
@@ -292,7 +297,7 @@ func StartRound(gettingNext):
 
 	var prevBatchIndex = mainBatchIndex - 1
 	if (prevBatchIndex < 0): prevBatchIndex = 2
-	if (roundArray[currentRound].usingItems):
+	if (roundArray[currentRound].usingItems and customizer[mainBatchIndex].items_on):
 		if (currentRound > 0 or (currentRound == 0 and carryover_array[prevBatchIndex] and customizer[prevBatchIndex].items_on)):
 			itemManager.newBatchHasBegun = false
 			itemManager.BeginItemGrabbing()
@@ -302,7 +307,7 @@ func StartRound(gettingNext):
 			itemManager.BeginItemGrabbing()
 			return
 	else:
-		if (not firstRound and not carryover_array[prevBatchIndex] and currentRound == 0):
+		if (not firstRound and not carryover_array[prevBatchIndex] and customizer[prevBatchIndex].items_on and currentRound == 0):
 			await itemManager.HideItems()
 	if (currentRound <= 2 and roundArray[currentRound].amountBlank + roundArray[currentRound].amountLive == 1 and not (customizer[mainBatchIndex].shells_difficulty == 2)):
 		shellLoader.loadingDialogues[currentRound] = singleShellDialogues[currentRound]
