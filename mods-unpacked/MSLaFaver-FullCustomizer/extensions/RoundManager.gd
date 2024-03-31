@@ -208,9 +208,6 @@ func GenerateRandomBatches():
 				0:
 					usingItems = false
 					customizer[b.batchIndex].items_on = false
-				1:
-					usingItems = true
-					customizer[b.batchIndex].items_on = true
 				2:
 					minLives = 3
 		b.roundArray[0].startingHealth = ShortRandom(customizer[b.batchIndex].lives_min, minLives, customizer[b.batchIndex].lives_max, 6)
@@ -272,6 +269,8 @@ func StartRound(gettingNext):
 	await (handcuffs.RemoveAllCuffsRoutine())
 	#FINAL SHOWDOWN DIALOGUE
 	if (playerData.currentBatchIndex == 2 and not defibCutterReady and not endless):
+		if not playerData.hasReadItemDistributionIntro:
+			playerData.hasReadItemDistributionIntro2 = true
 		shellLoader.dialogue.dealerLowPitched = true
 		camera.BeginLerp("enemy") 
 		await get_tree().create_timer(.6, false).timeout
