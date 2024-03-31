@@ -28,7 +28,7 @@ var customizer_round1 = {
 	"shells_total_max": 8,
 	"shells_live_percentage_min": 0.5,
 	"shells_live_percentage_max": 0.5,
-	"shells_difficulty": 0,		# Visible / Total / Hidden
+	#"shells_difficulty": 0,		# Visible / Total / Hidden	IF USED, THE DEALER CHEATS
 	"items_on": true,
 	"items_even": false,
 	"items_visible": true,
