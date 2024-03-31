@@ -28,7 +28,7 @@ All MSLaFaver mods are compatible with each other. Below is a chart of other mod
 ## VirtualReality Setup
 The VirtualReality mod uses an OpenXR runtime such as SteamVR to run Buckshot Roulette in full VR. To use the mod, download `override.cfg` and place it in the same folder as the patched .exe file. The game should then be able to work with an OpenXR compatible HMD (head-mounted display). The main menu can be skipped with spacebar, and the base game uses the mouse for interaction.
 
-This mod was tested on a Quest 2 with a link cable connecting to SteamVR. For endless mode, either use the FullCustomizer mod or click to the left after the pill bottle is selected Please report any issues encountered.
+This mod was tested on a Quest 2 with a link cable connecting to SteamVR. For endless mode, either use the FullCustomizer mod or click to the left after the pill bottle is selected. Please report any issues encountered.
 
 ## FullCustomizer Setup
 The FullCustomizer mod can be configured using the file located at `C:\Users\Username\AppData\Roaming\Godot\app_userdata\Buckshot Roulette - BRML 1.1.1\configs\MSLaFaver-FullCustomizer\user.json`. In-game configuration is planned for a future version.
