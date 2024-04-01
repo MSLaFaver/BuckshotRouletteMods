@@ -86,6 +86,7 @@ func _process(delta):
 				menuManager = root.get_child(2).get_node("standalone managers/menu manager")
 				camera.rotation_degrees = Vector3(9, 88.8, 0)
 				viewblocker = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent/viewblocker")
+				menu_objects.clear()
 				menu_objects.append(root.get_child(2).get_node("shell waterfall2"))
 				menu_objects.append(root.get_child(2).get_node("shell waterfall4"))
 				menu_objects.append(root.get_child(2).get_node("title"))
@@ -118,6 +119,7 @@ func _process(delta):
 				endingManager = root.get_child(2).get_node("standalone managers/ending manager")
 				var vehicle = root.get_child(2).get_node("player vehicle parent")
 				
+				labelArray.clear()
 				var label_congrats = Label3D.new()
 				label_congrats.name = "label congrats"				
 				label_congrats.font = font
