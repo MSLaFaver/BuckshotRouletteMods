@@ -113,7 +113,7 @@ func _ready():
 		}
 		if (not customizer_main.multi_round_config): break
 
-	carryover_array = [bool(customizer_main.carryover % 2), bool((customizer_main.carryover / 2) % 2), bool((customizer_main.carryover / 4) % 2)]
+	carryover_array = [bool(int(customizer_main.carryover) % 2), bool(int(customizer_main.carryover / 2) % 2), bool(int(customizer_main.carryover / 4) % 2)]
 
 func ShortRandom(min_val, min_min, max_val, max_max, isFloat = false):
 	if (min_val == max_val) or (min_val >= max_val):
