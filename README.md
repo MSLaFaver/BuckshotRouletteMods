@@ -13,7 +13,7 @@ More mods for Buckshot Roulette by Mike Klubnika, based on AGO061's BRML.
 
 ModLoader: https://github.com/AGO061/BuckshotRouletteModLoader/releases/tag/1.1.1
 
-Mods are confirmed to work with the latest version of the BRML.
+Mods are confirmed to work with BRML 1.1.1.
 
 ## Compatibility
 All MSLaFaver mods are compatible with each other. Below is a chart of other mods tested for compatibility.
