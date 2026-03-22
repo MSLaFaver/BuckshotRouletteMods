@@ -50,6 +50,7 @@ theme_override_colors/font_hover_color = Color(0.72549, 0.815686, 1, 1)
 theme_override_fonts/font = ExtResource("3_e2ffa")
 theme_override_font_sizes/font_size = 20
 text = "MODMENU_UPDATE"
+underline = 2
 
 [node name="author_container" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -94,6 +95,7 @@ mouse_default_cursor_shape = 0
 theme_override_fonts/font = ExtResource("3_e2ffa")
 theme_override_font_sizes/font_size = 20
 text = "MODMENU_CONFIG EDIT"
+underline = 2
 
 [node name="description_container" type="MarginContainer" parent="."]
 layout_mode = 2
