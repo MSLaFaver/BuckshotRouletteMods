@@ -1,0 +1,34 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://du0qnxhio1y4q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mrxl2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apac6"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0, 0, 0, 0.254902)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.8, 0.34902)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56p8y"]
+bg_color = Color(0.666667, 0.666667, 0.666667, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ur4u"]
+bg_color = Color(0.666667, 0.666667, 0.666667, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y0wei"]
+bg_color = Color(0.666667, 0.666667, 0.666667, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_87b01"]
+content_margin_left = 6.0
+
+[resource]
+CheckButton/constants/check_v_offset = -5
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_mrxl2")
+ScrollContainer/styles/panel = SubResource("StyleBoxFlat_apac6")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_56p8y")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_7ur4u")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_y0wei")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_87b01")

@@ -1,0 +1,320 @@
+[gd_scene load_steps=12 format=3 uid="uid://67h6i5pxkjrg"]
+
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-MoreMusic/utils/config.gd" id="1_ro4ni"]
+[ext_resource type="FontFile" uid="uid://bi4h8iakak5or" path="res://fonts/AveriaSerif-Regular.ttf" id="3_8yrdk"]
+[ext_resource type="Theme" uid="uid://du0qnxhio1y4q" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/theme.tres" id="3_hrmqd"]
+[ext_resource type="FontFile" uid="uid://builq3tr6w060" path="res://fonts/DOTMATRI.TTF" id="5_5ur35"]
+[ext_resource type="FontFile" uid="uid://vhj3kkn6yn8o" path="res://fonts/fake receipt.otf" id="7_7yqn7"]
+[ext_resource type="Texture2D" uid="uid://bnhaflc7wwklo" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/toggle-off.png" id="7_nnplb"]
+[ext_resource type="Script" path="res://scripts/ButtonClass.gd" id="8_dan4x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b4mg3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6y4jg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p82sx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pofwk"]
+
+[node name="config" type="Control" node_paths=PackedStringArray("main", "extra", "button_class_main", "button_class_extra", "button_class_default", "scroll", "list", "toggle_blankshell", "toggle_seventyk", "toggle_truedeath", "rounds", "hint")]
+layout_mode = 3
+anchors_preset = 0
+offset_bottom = 40.0
+script = ExtResource("1_ro4ni")
+main = NodePath("main")
+extra = NodePath("extra")
+button_class_main = NodePath("true button_main/button class_main")
+button_class_extra = NodePath("true button_extra/button class_extra")
+button_class_default = NodePath("true button_default/button class_default")
+scroll = NodePath("main/scroll")
+list = NodePath("main/scroll/list")
+toggle_blankshell = NodePath("extra/blankshell_enable")
+toggle_seventyk = NodePath("extra/70k_enable")
+toggle_truedeath = NodePath("extra/truedeath_enable")
+rounds = [NodePath("main/rounds/i"), NodePath("main/rounds/i2"), NodePath("main/rounds/i3")]
+hint = NodePath("main/hint")
+
+[node name="main" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="rounds" type="Control" parent="main"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="i" type="Label" parent="main/rounds"]
+layout_mode = 0
+offset_left = 518.0
+offset_top = 73.0
+offset_right = 563.0
+offset_bottom = 122.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8yrdk")
+theme_override_font_sizes/font_size = 40
+text = "I"
+horizontal_alignment = 1
+
+[node name="i2" type="Label" parent="main/rounds"]
+layout_mode = 0
+offset_left = 572.0
+offset_top = 73.0
+offset_right = 617.0
+offset_bottom = 122.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8yrdk")
+theme_override_font_sizes/font_size = 40
+text = "II"
+horizontal_alignment = 1
+
+[node name="i3" type="Label" parent="main/rounds"]
+layout_mode = 0
+offset_left = 626.0
+offset_top = 73.0
+offset_right = 671.0
+offset_bottom = 122.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8yrdk")
+theme_override_font_sizes/font_size = 40
+text = "III"
+horizontal_alignment = 1
+
+[node name="scroll" type="ScrollContainer" parent="main"]
+layout_mode = 0
+offset_left = 117.0
+offset_top = 125.0
+offset_right = 705.0
+offset_bottom = 401.0
+theme = ExtResource("3_hrmqd")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_b4mg3")
+
+[node name="list" type="VBoxContainer" parent="main/scroll"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="hint" type="Label" parent="main"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_top = 415.0
+offset_right = 960.0
+offset_bottom = 438.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Click a track name or round number to toggle all."
+horizontal_alignment = 1
+
+[node name="extra" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="lesliemag" type="Label" parent="extra"]
+layout_mode = 0
+offset_top = 156.0
+offset_right = 960.0
+offset_bottom = 179.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Synthwave covers by Leslie Mag"
+horizontal_alignment = 1
+
+[node name="blankshell" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 429.0
+offset_top = 183.0
+offset_right = 627.0
+offset_bottom = 222.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "Blank Shell"
+horizontal_alignment = 1
+
+[node name="blankshell_enable" type="CheckButton" parent="extra"]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 182.0
+offset_right = 614.0
+offset_bottom = 320.0
+scale = Vector2(0.25, 0.25)
+theme_override_icons/unchecked = ExtResource("7_nnplb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6y4jg")
+
+[node name="menu" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 583.0
+offset_top = 196.0
+offset_right = 647.0
+offset_bottom = 219.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Menu"
+horizontal_alignment = 1
+
+[node name="70k" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 223.0
+offset_right = 573.0
+offset_bottom = 262.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "70K"
+horizontal_alignment = 1
+
+[node name="70k_enable" type="CheckButton" parent="extra"]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 222.0
+offset_right = 614.0
+offset_bottom = 360.0
+scale = Vector2(0.25, 0.25)
+theme_override_icons/unchecked = ExtResource("7_nnplb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p82sx")
+
+[node name="ending" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 479.0
+offset_top = 236.0
+offset_right = 543.0
+offset_bottom = 259.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Ending"
+horizontal_alignment = 1
+
+[node name="mikeklubnika" type="Label" parent="extra"]
+layout_mode = 0
+offset_top = 305.0
+offset_right = 960.0
+offset_bottom = 328.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Unused tracks by Mike Klubnika"
+horizontal_alignment = 1
+
+[node name="truedeath" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 424.0
+offset_top = 333.0
+offset_right = 622.0
+offset_bottom = 372.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "True Death"
+horizontal_alignment = 1
+
+[node name="truedeath_enable" type="CheckButton" parent="extra"]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 332.0
+offset_right = 614.0
+offset_bottom = 470.0
+scale = Vector2(0.25, 0.25)
+theme_override_icons/unchecked = ExtResource("7_nnplb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pofwk")
+
+[node name="finalround" type="Label" parent="extra"]
+layout_mode = 0
+offset_left = 581.0
+offset_top = 346.0
+offset_right = 681.0
+offset_bottom = 369.0
+theme_override_fonts/font = ExtResource("5_5ur35")
+text = "Final Round"
+horizontal_alignment = 1
+
+[node name="button_main" type="Label" parent="."]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 78.0
+offset_right = 351.0
+offset_bottom = 117.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "Main Game"
+horizontal_alignment = 1
+
+[node name="true button_main" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 177.0
+offset_top = 83.0
+offset_right = 300.0
+offset_bottom = 107.0
+
+[node name="button class_main" type="Node" parent="true button_main" node_paths=PackedStringArray("ui")]
+script = ExtResource("8_dan4x")
+alias = "main"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_main")
+playing = true
+ui_opacity_active = 0.5
+
+[node name="button_extra" type="Label" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 78.0
+offset_right = 491.0
+offset_bottom = 117.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "Extras"
+horizontal_alignment = 1
+
+[node name="true button_extra" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 338.0
+offset_top = 83.0
+offset_right = 419.0
+offset_bottom = 107.0
+
+[node name="button class_extra" type="Node" parent="true button_extra" node_paths=PackedStringArray("ui")]
+script = ExtResource("8_dan4x")
+alias = "extra"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_extra")
+playing = true
+ui_opacity_active = 0.5
+
+[node name="button_default" type="Label" parent="."]
+layout_mode = 0
+offset_left = 585.0
+offset_top = 445.0
+offset_right = 766.0
+offset_bottom = 484.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_7yqn7")
+theme_override_font_sizes/font_size = 26
+text = "Defaults"
+horizontal_alignment = 1
+
+[node name="true button_default" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 614.0
+offset_top = 450.0
+offset_right = 723.0
+offset_bottom = 474.0
+
+[node name="button class_default" type="Node" parent="true button_default" node_paths=PackedStringArray("ui")]
+script = ExtResource("8_dan4x")
+alias = "default"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_default")
+playing = true
+ui_opacity_active = 0.5

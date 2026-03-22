@@ -1,0 +1,176 @@
+[gd_scene load_steps=4 format=3 uid="uid://c17teqh3i1mr6"]
+
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-ModMenu/utils/config.gd" id="1_oni8c"]
+[ext_resource type="Theme" uid="uid://du0qnxhio1y4q" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/theme.tres" id="1_xtmxx"]
+[ext_resource type="FontFile" uid="uid://vhj3kkn6yn8o" path="res://fonts/fake receipt.otf" id="2_igx5e"]
+
+[node name="config" type="Control" node_paths=PackedStringArray("update_toggle", "filter_toggle", "discord_toggle", "burner_toggle", "pills_toggle")]
+layout_mode = 3
+anchors_preset = 0
+offset_bottom = 40.0
+script = ExtResource("1_oni8c")
+update_toggle = NodePath("update/toggle_parent/update_toggle")
+filter_toggle = NodePath("filter/toggle_parent/filter_toggle")
+discord_toggle = NodePath("discord/toggle_parent/discord_toggle")
+burner_toggle = NodePath("burner/toggle_parent/burner_toggle")
+pills_toggle = NodePath("pills/toggle_parent/pills_toggle")
+
+[node name="update" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 100.0
+offset_right = 960.0
+offset_bottom = 140.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="update"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="update_toggle" type="CheckButton" parent="update/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="update"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="update_label" type="Label" parent="update/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_TOGGLE UPDATE"
+
+[node name="filter" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 150.0
+offset_right = 960.0
+offset_bottom = 190.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="filter"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="filter_toggle" type="CheckButton" parent="filter/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="filter"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="filter_label" type="Label" parent="filter/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_TOGGLE FILTER"
+
+[node name="discord" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 200.0
+offset_right = 960.0
+offset_bottom = 240.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="discord"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="discord_toggle" type="CheckButton" parent="discord/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="discord"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="discord_label" type="Label" parent="discord/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_TOGGLE DISCORD"
+
+[node name="burner" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 250.0
+offset_right = 960.0
+offset_bottom = 290.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="burner"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="burner_toggle" type="CheckButton" parent="burner/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="burner"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="burner_label" type="Label" parent="burner/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_TOGGLE BURNER"
+
+[node name="pills" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 300.0
+offset_right = 960.0
+offset_bottom = 340.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="pills"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="pills_toggle" type="CheckButton" parent="pills/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="pills"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="pills_label" type="Label" parent="pills/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_TOGGLE PILLS"

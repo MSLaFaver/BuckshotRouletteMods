@@ -10,13 +10,15 @@ var cursorManager = null
 var eyes_flag = false
 var end_flag = false
 var briefcaseEyes
+var scene
 
 func _ready():
 	xr_origin = XROrigin3D.new()
 	xr_origin.name = "xr origin"
-	if get_tree().get_root().get_child(2).name == "main":
+	scene = GlobalVariables.get_current_scene_node()
+	if scene.name == "main":
 		world_scale = 10
-		briefcaseEyes = get_tree().get_root().get_child(2).get_node("briefcase machine eyes")
+		briefcaseEyes = scene.get_node("briefcase machine eyes")
 	xr_origin.world_scale = world_scale
 	#xr_origin.position = Vector3(0, -15.3, 0)
 	xr_camera = XRCamera3D.new()
@@ -57,7 +59,7 @@ func _process(delta):
 		rotation_degrees = Vector3(0,-19,0)
 		end_flag = true
 	if cursorManager == null:
-		cursorManager = get_tree().get_root().get_child(2).get_node("standalone managers/cursor manager")
+		cursorManager = scene.get_node("standalone managers/cursor manager")
 	else:
 		cursor_3d.visible = cursorManager.cursor_visible
 

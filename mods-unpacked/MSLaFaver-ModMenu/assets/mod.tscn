@@ -1,0 +1,107 @@
+[gd_scene load_steps=5 format=3 uid="uid://qk1hwy66o1q5"]
+
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-ModMenu/utils/mod.gd" id="1_edv2s"]
+[ext_resource type="FontFile" uid="uid://vhj3kkn6yn8o" path="res://fonts/fake receipt.otf" id="2_jx8di"]
+[ext_resource type="FontFile" uid="uid://builq3tr6w060" path="res://fonts/DOTMATRI.TTF" id="3_e2ffa"]
+[ext_resource type="Theme" uid="uid://du0qnxhio1y4q" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/theme.tres" id="4_mnoko"]
+
+[node name="mod" type="VBoxContainer" node_paths=PackedStringArray("title", "version", "update", "toggle", "author", "hyphen", "config", "description")]
+custom_minimum_size = Vector2(950, 100)
+theme_override_constants/separation = 0
+script = ExtResource("1_edv2s")
+title = NodePath("title_container/title")
+version = NodePath("title_container/version")
+update = NodePath("title_container/update")
+toggle = NodePath("author_container/toggle_parent/toggle")
+author = NodePath("author_container/author")
+hyphen = NodePath("author_container/hyphen")
+config = NodePath("author_container/config_parent/config")
+description = NodePath("description_container/description")
+
+[node name="title_container" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="title" type="Label" parent="title_container"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_jx8di")
+theme_override_font_sizes/font_size = 30
+text = "MODMENU"
+vertical_alignment = 1
+
+[node name="version" type="Label" parent="title_container"]
+custom_minimum_size = Vector2(0, 33.5)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_jx8di")
+theme_override_font_sizes/font_size = 20
+text = "v1.0.0"
+vertical_alignment = 2
+
+[node name="update" type="LinkButton" parent="title_container"]
+visible = false
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_vertical = 8
+mouse_default_cursor_shape = 0
+theme_override_colors/font_color = Color(0.607843, 0.737255, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.764706, 0.843137, 1, 1)
+theme_override_colors/font_hover_color = Color(0.72549, 0.815686, 1, 1)
+theme_override_fonts/font = ExtResource("3_e2ffa")
+theme_override_font_sizes/font_size = 20
+text = "MODMENU_UPDATE"
+
+[node name="author_container" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="toggle_parent" type="Control" parent="author_container"]
+custom_minimum_size = Vector2(65, 30)
+layout_mode = 2
+
+[node name="toggle" type="CheckButton" parent="author_container/toggle_parent"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 264.0
+offset_bottom = 136.0
+scale = Vector2(0.2, 0.2)
+theme = ExtResource("4_mnoko")
+
+[node name="author" type="Label" parent="author_container"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2ffa")
+theme_override_font_sizes/font_size = 20
+text = "by MSLaFaver"
+
+[node name="hyphen" type="Label" parent="author_container"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2ffa")
+theme_override_font_sizes/font_size = 20
+text = " - "
+
+[node name="config_parent" type="Control" parent="author_container"]
+layout_mode = 2
+
+[node name="config" type="LinkButton" parent="author_container/config_parent"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_right = 198.0
+offset_bottom = 30.0
+mouse_default_cursor_shape = 0
+theme_override_fonts/font = ExtResource("3_e2ffa")
+theme_override_font_sizes/font_size = 20
+text = "MODMENU_CONFIG EDIT"
+
+[node name="description_container" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+
+[node name="description" type="Label" parent="description_container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2ffa")
+theme_override_font_sizes/font_size = 20
+text = "MODMENU_DESC"
+autowrap_mode = 3

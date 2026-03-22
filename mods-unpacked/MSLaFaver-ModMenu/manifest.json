@@ -1,0 +1,27 @@
+{
+	"name": "ModMenu",
+	"namespace": "MSLaFaver",
+	"version_number": "1.0.0",
+	"description": "MODMENU_DESC",
+	"website_url": "https://github.com/MSLaFaver/ExampleRepo",
+	"dependencies": [],
+	"extra": {
+		"godot": {
+			"authors": ["MSLaFaver"],
+			"compatible_game_version": [
+				"1.2.2",
+				"2.2.0"
+			],
+			"compatible_mod_loader_version": ["7.0.1"],
+			"config_schema": {
+				"type": "object",
+				"properties": {
+					"unused": {
+						"type": "boolean",
+						"default": false
+					}
+				}
+			}
+		}
+	}
+}

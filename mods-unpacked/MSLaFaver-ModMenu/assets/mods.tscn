@@ -1,0 +1,222 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwdiw31tpbjty"]
+
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-ModMenu/utils/mods.gd" id="1_bufsc"]
+[ext_resource type="FontFile" uid="uid://vhj3kkn6yn8o" path="res://fonts/fake receipt.otf" id="2_qoabe"]
+[ext_resource type="Script" path="res://scripts/ButtonClass.gd" id="3_nc8ny"]
+[ext_resource type="Theme" uid="uid://du0qnxhio1y4q" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/theme.tres" id="4_g3vt8"]
+
+[node name="mods" type="Control" node_paths=PackedStringArray("label_mods", "button_class_folder", "button_class_return", "button_class_restart", "button_class_do_not", "scroll_container", "mods_container", "config", "version", "parent_folder", "warning")]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_bufsc")
+label_mods = NodePath("label_mods")
+button_class_folder = NodePath("parent_folder/true button_folder/button class_folder")
+button_class_return = NodePath("true button_return/button class_return")
+button_class_restart = NodePath("warning/true button_restart/button class_restart")
+button_class_do_not = NodePath("warning/true button_do not/button class_do not")
+scroll_container = NodePath("scroll_container")
+mods_container = NodePath("scroll_container/mods_container")
+config = NodePath("config")
+version = NodePath("version")
+parent_folder = NodePath("parent_folder")
+warning = NodePath("warning")
+
+[node name="label_mods" type="Label" parent="."]
+layout_mode = 0
+offset_left = 115.198
+offset_top = 30.0
+offset_right = 1075.2
+offset_bottom = 69.0
+scale = Vector2(0.760005, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_LIST"
+horizontal_alignment = 1
+
+[node name="parent_folder" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="button_folder" type="Label" parent="parent_folder"]
+layout_mode = 0
+offset_top = 419.0
+offset_right = 960.002
+offset_bottom = 458.0
+scale = Vector2(0.760005, 1)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_FOLDER"
+horizontal_alignment = 1
+
+[node name="true button_folder" type="Button" parent="parent_folder"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 370.0
+offset_top = 424.0
+offset_right = 590.0
+offset_bottom = 448.0
+focus_neighbor_top = NodePath("../../true button_return")
+
+[node name="button class_folder" type="Node" parent="parent_folder/true button_folder" node_paths=PackedStringArray("ui")]
+script = ExtResource("3_nc8ny")
+alias = "folder"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_folder")
+playing = true
+ui_opacity_active = 0.5
+
+[node name="button_return" type="Label" parent="."]
+layout_mode = 0
+offset_top = 445.0
+offset_right = 960.0
+offset_bottom = 484.0
+scale = Vector2(0.760005, 1)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "RETURN"
+horizontal_alignment = 1
+
+[node name="true button_return" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 437.0
+offset_top = 450.0
+offset_right = 522.0
+offset_bottom = 474.0
+focus_neighbor_bottom = NodePath("../parent_folder/true button_folder")
+
+[node name="button class_return" type="Node" parent="true button_return" node_paths=PackedStringArray("ui")]
+script = ExtResource("3_nc8ny")
+alias = "exit"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_return")
+playing = true
+ui_opacity_active = 0.5
+
+[node name="scroll_container" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_top = 65.0
+offset_right = 960.0
+offset_bottom = 526.0
+scale = Vector2(0.76, 0.76)
+pivot_offset = Vector2(480, 0)
+theme = ExtResource("4_g3vt8")
+horizontal_scroll_mode = 0
+
+[node name="mods_container" type="VBoxContainer" parent="scroll_container"]
+layout_mode = 2
+
+[node name="version" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0.560784)
+layout_mode = 0
+offset_left = -243.0
+offset_top = 515.0
+offset_right = 1179.05
+offset_bottom = 591.82
+scale = Vector2(0.455, 0.463)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "insert version number here"
+
+[node name="config" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="warning" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label_warning" type="Label" parent="warning"]
+layout_mode = 0
+offset_top = 150.0
+offset_right = 960.0
+offset_bottom = 290.0
+scale = Vector2(0.760005, 1)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_WARNING"
+horizontal_alignment = 1
+
+[node name="button_restart" type="Label" parent="warning"]
+layout_mode = 0
+offset_top = 385.0
+offset_right = 960.0
+offset_bottom = 424.0
+scale = Vector2(0.760005, 1)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_RESTART"
+horizontal_alignment = 1
+
+[node name="true button_restart" type="Button" parent="warning"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 430.0
+offset_top = 390.0
+offset_right = 530.0
+offset_bottom = 414.0
+focus_neighbor_top = NodePath("../true button_do not")
+
+[node name="button class_restart" type="Node" parent="warning/true button_restart" node_paths=PackedStringArray("ui")]
+script = ExtResource("3_nc8ny")
+alias = "restart"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_restart")
+playing = true
+ui_opacity_active = 0.5
+
+[node name="button_do not" type="Label" parent="warning"]
+layout_mode = 0
+offset_top = 445.0
+offset_right = 960.0
+offset_bottom = 484.0
+scale = Vector2(0.760005, 1)
+pivot_offset = Vector2(480, 0)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_qoabe")
+theme_override_font_sizes/font_size = 26
+text = "MODMENU_DO NOT"
+horizontal_alignment = 1
+
+[node name="true button_do not" type="Button" parent="warning"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 437.0
+offset_top = 450.0
+offset_right = 522.0
+offset_bottom = 474.0
+focus_neighbor_bottom = NodePath("../true button_restart")
+
+[node name="button class_do not" type="Node" parent="warning/true button_do not" node_paths=PackedStringArray("ui")]
+script = ExtResource("3_nc8ny")
+alias = "do not"
+isActive = true
+isDynamic = true
+ui = NodePath("../../button_do not")
+playing = true
+ui_opacity_active = 0.5

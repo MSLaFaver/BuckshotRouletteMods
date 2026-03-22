@@ -1,7 +1,7 @@
 {
 	"name": "VirtualReality",
 	"namespace": "MSLaFaver",
-	"version_number": "0.0.1",
+	"version_number": "0.0.2",
 	"description": "Enables VR using Godot XR",
 	"dependencies": [],
 	"website_url": "",
@@ -14,7 +14,7 @@
 			"load_before": [],
 			"incompatibilities": [],
 			"compatible_mod_loader_version": ["6.2.0"],
-			"compatible_game_version": ["1.1.0"],
+			"compatible_game_version": ["2.0.0.2"],
 			"config_schema": {}
 		}
 	}

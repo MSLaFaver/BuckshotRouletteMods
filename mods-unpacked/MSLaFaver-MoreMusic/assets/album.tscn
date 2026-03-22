@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://csn4ghohf6s1s"]
+
+[ext_resource type="FontFile" uid="uid://builq3tr6w060" path="res://fonts/DOTMATRI.TTF" id="1_lgojt"]
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-MoreMusic/utils/album.gd" id="1_st4ji"]
+
+[node name="album" type="HBoxContainer" node_paths=PackedStringArray("title")]
+offset_right = 363.0
+offset_bottom = 15.0
+script = ExtResource("1_st4ji")
+title = NodePath("title_parent/title")
+
+[node name="title_parent" type="Control" parent="."]
+custom_minimum_size = Vector2(363, 15)
+layout_mode = 2
+
+[node name="title" type="Label" parent="title_parent"]
+layout_mode = 0
+offset_right = 363.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("1_lgojt")
+text = "Mike Klubnika - OST Vol. I"
+horizontal_alignment = 2

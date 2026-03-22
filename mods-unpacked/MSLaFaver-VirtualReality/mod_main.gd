@@ -1,27 +1,19 @@
 extends Node
 
-const AUTHORNAME_MODNAME_DIR := "MSLaFaver-VirtualReality"
-const AUTHORNAME_MODNAME_LOG_NAME := "MSLaFaver-VirtualReality:Main"
+const id := "MSLaFaver-VirtualReality"
 
-var mod_dir_path := ""
-var extensions_dir_path := ""
+const hooks = [
+	"scripts/CameraManager.gd",
+	"scripts/EndingManager.gd",
+	"scripts/MouseRaycast.gd"
+]
 
 func _init() -> void:
-	mod_dir_path = ModLoaderMod.get_unpacked_dir()+(AUTHORNAME_MODNAME_DIR)+"/"
-	# Add extensions
-	install_script_extensions()
+	for hook in hooks:
+		ModLoaderMod.install_script_hooks("res://%s" % hook,
+			"res://mods-unpacked/%s/%s" % [id, hook])
 
-func install_script_extensions() -> void:
-	extensions_dir_path = mod_dir_path+"extensions/"
-	const extensions = [
-		'CameraManager',
-		'MouseRaycast',
-		'EndingManager'
-	]
-	for extension in extensions:
-		ModLoaderMod.install_script_extension(extensions_dir_path+extension+".gd")
-
-var root
+var scene
 var camera
 var introManager
 var menuManager
@@ -65,69 +57,70 @@ func _ready():
 	InputMap.action_add_event("space",ev)
 
 func _unhandled_input(event):
-	if (event.is_action_pressed("space") and root.get_child(2).name == "menu" and cursorManager.cursor_visible):
-		menuManager.Start()
+	if event.is_action_pressed("space"):
+		if scene != null and scene.name == "menu" and cursorManager.cursor_visible:
+			menuManager.Start()
 
 func _process(delta):
-	root = get_tree().get_root()
-	camera = root.get_child(2).get_node("Camera")
-	if not camera.fixed:
-		cursorManager = root.get_child(2).get_node("standalone managers/cursor manager")
-		worldEnvironment = root.get_child(2).get_node("WorldEnvironment")
-
+	scene = get_node("/root").get_children().back()
+	camera = scene.get_node("Camera")
+	if not camera.has_node("fixed"):
+		cursorManager = scene.get_node("standalone managers/cursor manager")
+		worldEnvironment = scene.get_node("WorldEnvironment")
+		
+		worldEnvironment.environment.adjustment_contrast = 1.0
 		brightness_current = worldEnvironment.environment.adjustment_brightness
 		worldEnvironment.environment.adjustment_brightness = 0.0
-
+		
 		MakeInvisible(camera.get_node("post processing"))
 		MakeInvisible(camera.get_node("dialogue UI"))
 		
-		match root.get_child(2).name:
+		match scene.name:
 			"menu":
-				menuManager = root.get_child(2).get_node("standalone managers/menu manager")
+				menuManager = scene.get_node("standalone managers/menu manager")
 				camera.rotation_degrees = Vector3(9, 88.8, 0)
-				viewblocker = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent/viewblocker")
+				viewblocker = scene.get_node("Camera/dialogue UI/viewblocker parent/viewblocker")
 				menu_objects.clear()
-				menu_objects.append(root.get_child(2).get_node("shell waterfall2"))
-				menu_objects.append(root.get_child(2).get_node("shell waterfall4"))
-				menu_objects.append(root.get_child(2).get_node("title"))
+				menu_objects.append(scene.get_node("shell waterfall2"))
+				menu_objects.append(scene.get_node("shell waterfall4"))
+				menu_objects.append(scene.get_node("title"))
 				for object in menu_objects:
 					object.visible = false
-				worldEnvironment.environment.fog_enabled = false
 				worldEnvironment.environment.fog_light_energy = 0.0
-
+				
 				splash = MeshInstance3D.new()
-				splash.mesh = root.get_child(2).get_node("title").mesh
+				splash.mesh = scene.get_node("title").mesh
 				var splash_texture = StandardMaterial3D.new()
-				splash_texture.albedo_texture = ImageTexture.create_from_image(Image.load_from_file("res://mods-unpacked/MSLaFaver-VirtualReality/splash.png"))
+				splash_texture.albedo_texture = ImageTexture.create_from_image(Image.load_from_file("res://mods-unpacked/MSLaFaver-ModMenu/assets/splash.jpg"))
 				splash_texture.transparency = 2
 				splash.material_override = splash_texture
 				splash.position = Vector3(-4, 0, 12.157)
 				splash.rotation_degrees = Vector3(80.3, -90, 180)
 				splash.scale *= 1.3
-				root.get_child(2).add_child(splash)
+				scene.add_child(splash)
 				viewblocker.color.a = 1
 			"main":
-				introManager = root.get_child(2).get_node("standalone managers/intro manager")
+				introManager = scene.get_node("standalone managers/intro manager")
 				introManager.rot_floor = Vector3(0, -53.5, 0)
-				deathManager = root.get_child(2).get_node("standalone managers/death manager")
-				descriptionManager = root.get_child(2).get_node("standalone managers/description manager")
-				interactionManager = root.get_child(2).get_node("standalone managers/interaction manager")
-				itemManager = root.get_child(2).get_node("standalone managers/item manager")
+				deathManager = scene.get_node("standalone managers/death manager")
+				descriptionManager = scene.get_node("standalone managers/description manager")
+				interactionManager = scene.get_node("standalone managers/interaction manager")
+				itemManager = scene.get_node("standalone managers/item manager")
 				camera.rotation_degrees = Vector3(0, -90, 0)
-				viewblocker = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
-
-				endingManager = root.get_child(2).get_node("standalone managers/ending manager")
-				var vehicle = root.get_child(2).get_node("player vehicle parent")
+				viewblocker = scene.get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
+				
+				endingManager = scene.get_node("standalone managers/ending manager")
+				var vehicle = scene.get_node("player vehicle parent")
 				
 				labelArray.clear()
 				var label_congrats = Label3D.new()
-				label_congrats.name = "label congrats"				
+				label_congrats.name = "label congrats"
 				label_congrats.font = font
 				label_congrats.font_size = 42
 				label_congrats.scale = Vector3(0.379, 0.794, 1)
 				label_congrats.position = Vector3(-0.075, 1.295, 0.645)
 				labelArray.append(label_congrats)
-
+				
 				for i in range(1,6):
 					var label = Label3D.new()
 					label.name = "label " + str(i)
@@ -141,23 +134,29 @@ func _process(delta):
 				label_score.font_size = 42
 				label_score.position = Vector3(0.07, 0.69, 0.68)
 				labelArray.append(label_score)
-
+				
 				for label in labelArray:
 					label.rotation_degrees = Vector3(0,158.3,0)
 					label.visible = false
 					vehicle.add_child(label)
-
-				root.get_child(2).get_node("standalone managers/ending manager/animator_camera briefcase pan").libraries[""]._data["pan to brief"].remove_track(0)
-
-				var introAnimations = root.get_child(2).get_node("intro parent/animator_intro").libraries[""]._data
+				
+				scene.get_node("standalone managers/ending manager/animator_camera briefcase pan").libraries[""]._data["pan to brief"].remove_track(0)
+				
+				var introAnimations = scene.get_node("intro parent/animator_intro").libraries[""]._data
 				introAnimations["camera exit bathroom"].track_insert_key(2,2.0,false)
 				var enterBackroom = introAnimations["camera enter backroom"]
 				for i in range(1,4):
 					var enterBackroom_value = enterBackroom.track_get_key_value(0,enterBackroom.track_get_key_count(0) - i)
 					enterBackroom_value.x -= 1.7
 					enterBackroom.track_set_key_value(0,enterBackroom.track_get_key_count(0) - i,enterBackroom_value)
-
-				var item_animations = root.get_child(2).get_node("player item interaction parent/animator_player items")
+				
+				var waiverAnimations = scene.get_node("standalone managers/signature manager/animator_pickup waiver").libraries[""]._data
+				var pickupWaiver = waiverAnimations["pickup waiver"]
+				var pickupWaiver_value = pickupWaiver.track_get_key_value(1,0)
+				pickupWaiver_value.x -= 1.7
+				pickupWaiver.track_set_key_value(1,0,pickupWaiver_value)
+				
+				var item_animations = scene.get_node("player item interaction parent/animator_player items")
 				for i in range(0,2):
 					item_animations.libraries[""]._data["player use handsaw"].remove_track(3)
 				
@@ -179,17 +178,17 @@ func _process(delta):
 				for i in range(1, item_animations.libraries[""]._data["player use handsaw"].track_get_key_count(12) - 1):
 					var pos = item_animations.libraries[""]._data["player use handsaw"].track_get_key_value(12,i)
 					item_animations.libraries[""]._data["player use handsaw"].track_set_key_value(12,i,pos + Vector3(2,0,0))
-
-				dialogue_UI = root.get_child(2).get_node("Camera/dialogue UI")
+				
+				dialogue_UI = scene.get_node("Camera/dialogue UI")
 				dialogue_UI_text = dialogue_UI.get_node("main dialogue/dialogue text")
-
+				
 				dealer_dia = Label3D.new()
 				dealer_dia.visible = false
 				dealer_dia.font = font
 				dealer_dia.position = dealer_dia_pos
 				dealer_dia.rotation_degrees = Vector3(-10,-90,0)
 				dealer_dia.scale *= 3
-				root.get_child(2).get_node("tabletop parent").add_child(dealer_dia)
+				scene.get_node("tabletop parent").add_child(dealer_dia)
 				
 				smokerdude_dia = Label3D.new()
 				smokerdude_dia.visible = false
@@ -197,36 +196,38 @@ func _process(delta):
 				smokerdude_dia.position = smokerdude_dia_pos
 				smokerdude_dia.rotation_degrees = Vector3(15,180,-1.9)
 				smokerdude_dia.scale *= 2.0/3.0
-				root.get_child(2).get_node("intro parent/smoker dude revive player1").add_child(smokerdude_dia)
-
+				scene.get_node("intro parent/smoker dude revive player1").add_child(smokerdude_dia)
+				
 				item_description = Label3D.new()
 				item_description.font = font
 				item_description.scale *= 1.5
 				item_description.billboard = 1
-				root.get_child(2).get_node("tabletop parent").add_child(item_description)
+				scene.get_node("tabletop parent").add_child(item_description)
 				viewblocker.color.a = 0
-
-				var healthCounter = root.get_child(2).get_node("tabletop parent/main tabletop/health counter")
+				
+				var healthCounter = scene.get_node("tabletop parent/main tabletop/health counter")
 				for node in healthCounter.get_children():
 					if node is AudioStreamPlayer3D:
 						node.unit_size = 50
-
+			
 			"heaven":
 				camera.rotation_degrees = Vector3(0, 90, 0)
-				viewblocker = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
+				viewblocker = scene.get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
 				viewblocker.color.a = 0
 			"death":
-				viewblocker = root.get_child(2).get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
+				viewblocker = scene.get_node("Camera/dialogue UI/viewblocker parent/viewblcoker")
 				viewblocker.color.a = 0
 		viewblocker.visible = true
-
-		RemoveCameraRotations(root)
-
+		
+		RemoveCameraRotations(get_tree().get_root())
+		
 		brightness_flag = true
-
-		camera.fixed = true
-
-	match root.get_child(2).name:
+		
+		var fixed = Node.new()
+		fixed.name = "fixed"
+		camera.add_child(fixed)
+	
+	match scene.name:
 		"menu":
 			worldEnvironment.environment.adjustment_brightness = brightness_current * (1.0 - viewblocker.color.a)
 			if worldEnvironment.environment.adjustment_brightness >= brightness_current and not ratchet_flag:
@@ -242,8 +243,8 @@ func _process(delta):
 			if not introManager.smokerdude_revival.visible and smokerDude_flag:
 				camera.rotation_degrees = Vector3(0, -90, 0)
 				smokerDude_flag = false
-
-			if camera.end_flag:
+			
+			if camera.has_node("end flag"):
 				worldEnvironment.environment.adjustment_brightness = 5.68 * (1.0 - viewblocker.color.a)
 				labelArray[0].rotation.z = endingManager.label_congrats.rotation
 				labelArray[0].text = endingManager.label_congrats.text.substr(0, endingManager.label_congrats.visible_characters)
@@ -262,7 +263,7 @@ func _process(delta):
 					worldEnvironment.environment.adjustment_brightness = brightness_current
 					brightness_current = 0.0
 					brightness_flag = false
-
+			
 			var characters = dialogue_UI_text.text.substr(0, dialogue_UI_text.visible_characters)
 			dealer_dia.text = characters
 			smokerdude_dia.text = characters
@@ -282,13 +283,16 @@ func _process(delta):
 					_:
 						item_description.global_position = itemManager.gridParentArray[activeBranch.itemGridIndex].global_position + Vector3(0,2,0)
 			item_description.transparency = 1.0 - descriptionManager.uiArray[0].modulate.a
-			item_description.text = descriptionManager.uiArray[1].text + "\n\n" + descriptionManager.uiArray[3].text
-
+			item_description.text = tr(descriptionManager.uiArray[1].text) + "\n\n" + tr(descriptionManager.uiArray[3].text)
+		
 		"heaven":
 			if not viewblocker.visible and brightness_flag:
 				worldEnvironment.environment.adjustment_brightness = brightness_current * (1.0 - viewblocker.color.a)
 				brightness_current = 0.0
 				brightness_flag = false
+	
+	if worldEnvironment != null and worldEnvironment.environment.adjustment_contrast != 1.0:
+		print("SOMETHING HAPPENED")
 
 func RemoveCameraRotations(node):
 	if node is AnimationPlayer:
@@ -307,6 +311,7 @@ func RemoveCameraRotations(node):
 		RemoveCameraRotations(child)
 
 func MakeInvisible(node):
-	node.visible = false
+	if node is CanvasItem:
+		node.visible = false
 	for child in node.get_children():
 		MakeInvisible(child)
