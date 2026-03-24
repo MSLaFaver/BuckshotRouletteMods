@@ -18,7 +18,7 @@ func _process(chain: ModLoaderHookChain, delta):
 		mouseRaycast.add_child(ready_run)
 		xr_origin = XROrigin3D.new()
 		xr_origin.name = "xr origin"
-		scene = mouseRaycast.get_node("/root").get_children().back()
+		scene = mouseRaycast.get_tree().get_current_scene()
 		if scene.name == "main":
 			world_scale = 10
 			briefcaseEyes = scene.get_node("briefcase machine eyes")

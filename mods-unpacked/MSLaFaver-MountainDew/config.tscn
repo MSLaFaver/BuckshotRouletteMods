@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://lfdhhtmq5mkb"]
+
+[ext_resource type="Script" path="res://mods-unpacked/MSLaFaver-MountainDew/utils/config.gd" id="1_720n7"]
+[ext_resource type="Theme" uid="uid://du0qnxhio1y4q" path="res://mods-unpacked/MSLaFaver-ModMenu/assets/theme.tres" id="1_xtmxx"]
+[ext_resource type="FontFile" uid="uid://vhj3kkn6yn8o" path="res://fonts/fake receipt.otf" id="2_igx5e"]
+
+[node name="config" type="Control" node_paths=PackedStringArray("help_toggle")]
+layout_mode = 3
+anchors_preset = 0
+offset_bottom = 40.0
+script = ExtResource("1_720n7")
+help_toggle = NodePath("help/toggle_parent/help_toggle")
+
+[node name="help" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 200.0
+offset_right = 960.0
+offset_bottom = 240.0
+alignment = 1
+
+[node name="toggle_parent" type="Control" parent="help"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="help_toggle" type="CheckButton" parent="help/toggle_parent"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 266.0
+offset_bottom = 138.0
+scale = Vector2(0.25, 0.25)
+theme = ExtResource("1_xtmxx")
+
+[node name="label_parent" type="Control" parent="help"]
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+
+[node name="help_label" type="Label" parent="help/label_parent"]
+layout_mode = 2
+offset_right = 72.0
+offset_bottom = 26.0
+scale = Vector2(0.76, 1)
+theme_override_fonts/font = ExtResource("2_igx5e")
+theme_override_font_sizes/font_size = 26
+text = "MOUNTAINDEW_HELP"

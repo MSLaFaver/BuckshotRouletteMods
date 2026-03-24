@@ -3,6 +3,7 @@ extends Node
 const hooks = [
 	"scripts/BurnerPhone.gd",
 	"scripts/ButtonClass.gd",
+	"scripts/CursorManager.gd",
 	"scripts/MenuManager.gd",
 	"scripts/OptionsManager.gd",
 	"scripts/SignatureManager.gd",
@@ -29,6 +30,7 @@ var lerp_flag = false
 var fixed_image = false
 var initialized = false
 var button_class_array = []
+var cursor_override: Control
 
 func _init():
 	ModLoaderStore.ml_options.semantic_version = GlobalVariables.currentVersion_nr.substr(1)
@@ -85,7 +87,15 @@ func _process(_delta):
 			rect.position = Vector2(-100,-100)
 	var children = root.get_children()
 	if not children.is_empty():
-		match children.back().name:
+		var scene = get_tree().get_current_scene()
+		var main_scenes = ["main", "heaven", "mp_main"]
+		if main_scenes.has(scene.name) and not scene.has_node("cursor override"):
+			cursor_override = Control.new()
+			cursor_override.name = "cursor override"
+			cursor_override.size = Vector2i(960,540)
+			cursor_override.mouse_filter = Control.MOUSE_FILTER_PASS
+			children.back().add_child(cursor_override)
+		match scene.name:
 			"menu":
 				if not fixed_image:
 					var config = ModLoaderConfig.get_config(id, "user")
@@ -126,7 +136,7 @@ func do_translations():
 		base_path = "res://multiplayer/mp_localization/Buckshot Roulette - Localization Sheet - multiplayer24.csv"
 	
 	import_translation(base_path)
-	find_csv_files("res://translations")
+	find_csv_files(ProjectSettings.globalize_path("res://translations"))
 	
 	var mod_data_set = ModLoaderMod.get_mod_data_all().values()
 	for mod_data in mod_data_set:
@@ -134,8 +144,7 @@ func do_translations():
 		var mod_namespace = mod_data.manifest.mod_namespace
 		var full_name = "%s-%s" % [mod_namespace, mod_name]
 		var translations_dir = "res://mods-unpacked/%s/translations" % full_name
-		if DirAccess.dir_exists_absolute(translations_dir):
-			find_csv_files(translations_dir)
+		find_csv_files(translations_dir)
 
 func import_translation(path: String):
 	var sheet = FileAccess.open(path, FileAccess.READ)
@@ -176,6 +185,7 @@ func fix_key(key: String):
 	return key
 
 func find_csv_files(dir):
-	for csv in  Array(DirAccess.get_files_at(dir)):
-		if csv.ends_with(".csv"):
-			import_translation("%s/%s" % [dir, csv])
+	if DirAccess.dir_exists_absolute(dir):
+		for csv in Array(DirAccess.get_files_at(dir)):
+			if csv.ends_with(".csv"):
+				import_translation("%s/%s" % [dir, csv])

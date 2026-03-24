@@ -62,7 +62,7 @@ func _unhandled_input(event):
 			menuManager.Start()
 
 func _process(delta):
-	scene = get_node("/root").get_children().back()
+	scene = get_tree().get_current_scene()
 	camera = scene.get_node("Camera")
 	if not camera.has_node("fixed"):
 		cursorManager = scene.get_node("standalone managers/cursor manager")
