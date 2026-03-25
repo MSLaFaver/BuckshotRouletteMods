@@ -14,7 +14,7 @@ func _init() -> void:
 			"res://mods-unpacked/%s/%s" % [id, hook])
 
 var scene
-var camera
+var camera: Camera3D
 var introManager
 var menuManager
 var cursorManager
@@ -156,6 +156,10 @@ func _process(delta):
 				pickupWaiver_value.x -= 1.7
 				pickupWaiver.track_set_key_value(1,0,pickupWaiver_value)
 				
+				var muzzleFlashAnimations = scene.get_node("tabletop parent/shotgun main parent/animator_muzzle flash").libraries[""]._data
+				var muzzleFlashFire = muzzleFlashAnimations["muzzle flash fire"]
+				muzzleFlashFire.track_set_enabled(0,false)
+				
 				var item_animations = scene.get_node("player item interaction parent/animator_player items")
 				for i in range(0,2):
 					item_animations.libraries[""]._data["player use handsaw"].remove_track(3)
@@ -209,6 +213,8 @@ func _process(delta):
 				for node in healthCounter.get_children():
 					if node is AudioStreamPlayer3D:
 						node.unit_size = 50
+				
+				#ConvertMeshes(scene)
 			
 			"heaven":
 				camera.rotation_degrees = Vector3(0, 90, 0)
@@ -249,10 +255,12 @@ func _process(delta):
 				labelArray[0].rotation.z = endingManager.label_congrats.rotation
 				labelArray[0].text = endingManager.label_congrats.text.substr(0, endingManager.label_congrats.visible_characters)
 				labelArray[0].visible = endingManager.label_congrats.visible
-				for i in range(1,7):
+				for i in range(1,6):
 					labelArray[i].rotation.z = endingManager.label_array[i-1].rotation
 					labelArray[i].scale = Vector3(endingManager.label_array[i-1].scale.x, endingManager.label_array[i-1].scale.y, endingManager.label_array[i-1].scale.x)
 					labelArray[i].text = endingManager.label_array[i-1].text
+					if i < 6:
+						labelArray[i].text = labelArray[i].text.substr(0,20) + " " + endingManager.label_array[i-1].get_node("stat").text
 					labelArray[i].visible = endingManager.label_array[i-1].visible
 			else:
 				if viewblocker.visible and not brightness_flag:
@@ -290,9 +298,6 @@ func _process(delta):
 				worldEnvironment.environment.adjustment_brightness = brightness_current * (1.0 - viewblocker.color.a)
 				brightness_current = 0.0
 				brightness_flag = false
-	
-	if worldEnvironment != null and worldEnvironment.environment.adjustment_contrast != 1.0:
-		print("SOMETHING HAPPENED")
 
 func RemoveCameraRotations(node):
 	if node is AnimationPlayer:
@@ -315,3 +320,9 @@ func MakeInvisible(node):
 		node.visible = false
 	for child in node.get_children():
 		MakeInvisible(child)
+
+func ConvertMeshes(scene: Node3D):
+	var all_meshes = scene.find_children("*","MeshInstance3D") as Array[MeshInstance3D]
+	for mesh in all_meshes:
+		if mesh.name != "blood splatter plane":
+			mesh.create_trimesh_collision()

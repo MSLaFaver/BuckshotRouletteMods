@@ -2,6 +2,8 @@ extends Object
 
 var xr_camera
 var xr_origin
+var left_hand
+var right_hand
 var world_scale = 1
 var adjust_amt
 var cursor_3d : MeshInstance3D
@@ -9,6 +11,7 @@ var cursorManager = null
 var eyes_flag = false
 var briefcaseEyes
 var scene
+var pressing = false
 
 func _process(chain: ModLoaderHookChain, delta):
 	var mouseRaycast = chain.reference_object
@@ -28,9 +31,30 @@ func _process(chain: ModLoaderHookChain, delta):
 		xr_camera.name = "xr camera"
 		xr_origin.add_child(xr_camera)
 		mouseRaycast.add_child(xr_origin)
-
+		
+		var ghost_hand = load("res://addons/godot-xr-tools/hands/materials/ghost_hand.tres")
+		ghost_hand.next_pass = null
+		ghost_hand.albedo_color.a = 0.02
+		
+		left_hand = XRController3D.new()
+		left_hand.name = "left hand"
+		left_hand.tracker = "left_hand"
+		var left_physics_hand = load("res://addons/godot-xr-tools/hands/scenes/highpoly/left_physics_hand.tscn").instantiate()
+		left_hand.add_child(left_physics_hand)
+		left_physics_hand.owner = left_hand
+		xr_origin.add_child(left_hand)
+		left_physics_hand.hand_material_override = ghost_hand
+		
+		right_hand = XRController3D.new()
+		right_hand.name = "right hand"
+		right_hand.tracker = "right_hand"
+		var right_physics_hand = load("res://addons/godot-xr-tools/hands/scenes/highpoly/right_physics_hand.tscn").instantiate()
+		right_hand.add_child(right_physics_hand)
+		right_physics_hand.owner = right_hand
+		xr_origin.add_child(right_hand)
+		right_physics_hand.hand_material_override = ghost_hand
+		
 		# CODE FROM teddybear082 ON DISCORD
-		var cursor_distance_from_camera : float = world_scale
 		cursor_3d = MeshInstance3D.new()
 		var cursor_3d_sphere : SphereMesh = SphereMesh.new()
 		var unshaded_material : StandardMaterial3D = StandardMaterial3D.new()
@@ -46,8 +70,8 @@ func _process(chain: ModLoaderHookChain, delta):
 		cursor_3d.transparency = 0.5
 		cursor_3d.visible = true
 		cursor_3d.name = "Cursor3D"
-		xr_camera.add_child(cursor_3d)
-		cursor_3d.transform.origin.z = -cursor_distance_from_camera
+		right_hand.add_child(cursor_3d)
+		cursor_3d.transform.origin.z = -world_scale
 	
 	get_selection(mouseRaycast)
 	if xr_origin.position == Vector3(0,0,0):
@@ -66,9 +90,31 @@ func _process(chain: ModLoaderHookChain, delta):
 		cursorManager = scene.get_node("standalone managers/cursor manager")
 	else:
 		cursor_3d.visible = cursorManager.cursor_visible
+	
+	var speed = 0.01
+	if Input.is_key_pressed(KEY_CTRL):
+		speed = 0.02
+	if Input.is_key_pressed(KEY_LEFT) and not Input.is_key_pressed(KEY_RIGHT):
+		mouseRaycast.rotation.y += speed
+	elif not Input.is_key_pressed(KEY_LEFT) and Input.is_key_pressed(KEY_RIGHT):
+		mouseRaycast.rotation.y -= speed
+	if Input.is_key_pressed(KEY_UP) and not Input.is_key_pressed(KEY_DOWN):
+		mouseRaycast.rotation.x += speed
+	elif not Input.is_key_pressed(KEY_UP) and Input.is_key_pressed(KEY_DOWN):
+		mouseRaycast.rotation.x -= speed
+	
+	if right_hand.is_button_pressed("trigger") and not pressing:
+		pressing = true
+		var ev = InputEventMouseButton.new()
+		ev.button_index = MOUSE_BUTTON_LEFT
+		ev.pressed = true
+		Input.parse_input_event(ev)
+	elif not right_hand.is_button_pressed("trigger"):
+		pressing = false
 
 func get_selection(mouseRaycast):
-	var worldspace = xr_camera.get_world_3d().direct_space_state
-	var start = xr_camera.project_ray_origin(mouseRaycast.mouse)
-	var end = xr_camera.project_position(mouseRaycast.mouse, 20000)
-	mouseRaycast.result = worldspace.intersect_ray(PhysicsRayQueryParameters3D.create(start, end))
+	var worldspace = right_hand.get_world_3d().direct_space_state
+	var from = right_hand.global_position
+	var to = cursor_3d.global_position
+	var end = from + (to - from) * 100
+	mouseRaycast.result = worldspace.intersect_ray(PhysicsRayQueryParameters3D.create(from, end))

@@ -60,18 +60,7 @@ func RandomizeDew(itemManager: ItemManager, dealer: bool = false):
 	var rot_can = randf_range(0,360)
 	var instanceArray
 	instanceArray = itemManager.instanceArray if not dealer else itemManager.instanceArray_dealer
-	if angles_original ==  null:
-		angles_original = [
-			instanceArray[2].rot_inBriefcase,
-			instanceArray[2].rot_inHand,
-			instanceArray[2].rot_offset
-		]
-	var angles = angles_original.duplicate()
-	RotateAll(angles, rot_can)
-	print(angles)
-	instanceArray[2].rot_inBriefcase = angles[0]
-	instanceArray[2].rot_inHand = angles[1]
-	instanceArray[2].rot_offset = angles[2]
+	instanceArray[2].rot_offset.y = rot_can
 	SetMaterial(idx)
 	if not dealer:
 		UpdateInstances(itemManager.instanceArray)
@@ -107,25 +96,3 @@ func UpdateInstances(instanceArray: Array):
 			dew.pack(beer_item)
 			item.instance = dew
 			break
-
-func Rotate(rotation: Vector3, delta: float) -> Vector3:
-	var basis = Basis.from_euler(rotation * PI / 180.0)
-	var rot = Basis(Vector3.UP, deg_to_rad(delta))
-	return (basis * rot).get_euler() * 180.0 / PI
-
-func RotateAll(angles, rot):
-	for i in range(0, angles.size()):
-		angles[i] = Rotate(angles[i], rot)
-		if i > 0:
-			var prev_y = angles[i - 1].y
-			var cur_y = angles[i].y
-			var flip = false
-			while cur_y < prev_y:
-				flip = not flip
-				cur_y += 180
-			var v: Vector3 = angles[i]
-			v.y = cur_y
-			if flip:
-				v.x = -v.x
-				v.z = -v.z
-			angles[i] = v
